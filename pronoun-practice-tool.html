@@ -462,11 +462,25 @@
                 updateHintDisplay();
             }
 
+            function normalizeAnswer(ans) {
+                return ans.toString()
+                          .trim()
+                          .toLowerCase()
+                          .normalize('NFD')
+                          .replace(/[\u0300-\u036f]/g, '')
+                          .replace(/[.!?]/g, '');
+            }
+
+            function isCorrectAnswer(userAns, correctArray) {
+                const normalizedUser = normalizeAnswer(userAns);
+                return correctArray.some(a => normalizeAnswer(a) === normalizedUser);
+            }
+
             function checkAnswer() {
-                const userAnswer = answerInput.value.trim().toLowerCase();
+                const userAnswer = answerInput.value;
                 const correctAnswerArray = currentSentences[currentQuestionIndex].answer;
                 
-                if (!userAnswer) return;
+                if (!userAnswer.trim()) return;
 
                 answerInput.disabled = true;
                 stopTimer();
@@ -474,7 +488,7 @@
                 checkBtn.classList.add('hidden');
                 nextBtn.classList.remove('hidden');
 
-                if (correctAnswerArray.includes(userAnswer)) {
+                if (isCorrectAnswer(userAnswer, correctAnswerArray)) {
                     feedbackMessage.textContent = 'Correct! 🎉';
                     feedbackMessage.className = 'correct';
                     answerInput.classList.add('correct-answer');
