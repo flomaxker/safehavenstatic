@@ -40,8 +40,9 @@
         #answer-input:focus { outline: none; border-color: var(--color-primary); }
         #answer-input.correct-answer { border-color: var(--color-secondary); background-color: #f0fdfa; }
         #answer-input.incorrect-answer { border-color: var(--color-accent); background-color: #fff1f2; }
+        #hint-message { min-height: 1.2em; text-align: center; color: var(--color-text-light); margin-bottom: 0.5rem; }
         .action-buttons { display: flex; justify-content: center; gap: 1rem; margin-top: 1.5rem; }
-        #feedback-message { min-height: 1.5em; margin-top: 1.5rem; text-align: center; font-weight: 600; }
+        #feedback-message { min-height: 1.5em; margin-top: 1rem; text-align: center; font-weight: 600; }
         #feedback-message.correct { color: var(--color-secondary); }
         #feedback-message.incorrect { color: var(--color-accent); }
         #completion-screen { text-align: center; padding: 3rem 1.5rem; background-color: #eff6ff; border: 1px solid #dbeafe; border-radius: 8px; }
@@ -133,6 +134,7 @@
                 </div>
                 <div id="sentence-container"></div>
                 <input type="text" id="answer-input" placeholder="Type your answer" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+                <div id="hint-message" class="hint-message"></div>
                 <div id="feedback-message"></div>
                 <div class="action-buttons">
                     <button id="check-btn" class="btn btn-primary">Check Answer</button>
@@ -244,6 +246,7 @@
             const streakCounter = document.getElementById('streak-counter');
             const hintBtn = document.getElementById('hint-btn');
             const hintCounter = document.getElementById('hint-counter');
+            const hintMessage = document.getElementById('hint-message');
             const finalScoreEl = document.getElementById('final-score');
             const finalStreakEl = document.getElementById('final-streak');
             const highScoreEl = document.getElementById('high-score');
@@ -269,6 +272,7 @@
             let wrongQuestions = [];
             let totalQuestions = 10;
             let hintTokens = 3;
+            let hintUsed = false;
             let achievements = {};
             let highScores = {};
             const QUESTIONS_PER_ROUND = 10;
@@ -289,6 +293,7 @@
                 currentStreak = 0;
                 bestStreakInRound = 0;
                 hintTokens = 3;
+                hintUsed = false;
                 wrongQuestions = [];
 
                 updateStreakDisplay();
@@ -304,6 +309,9 @@
                 updateProgressBar();
                 const question = currentSentences[currentQuestionIndex];
                 sentenceContainer.textContent = question.sentence;
+                hintUsed = false;
+                hintMessage.textContent = '';
+                updateHintDisplay();
             }
 
             function checkAnswer() {
@@ -344,13 +352,14 @@
             }
 
             function useHint() {
-                if (hintTokens > 0) {
+                if (hintTokens > 0 && !hintUsed) {
                     hintTokens--;
+                    hintUsed = true;
                     currentStreak = 0; // Cost of using a hint
+                    const explanation = currentSentences[currentQuestionIndex].explanation || '';
+                    hintMessage.textContent = explanation;
                     updateStreakDisplay();
                     updateHintDisplay();
-                    const correctAnswer = currentSentences[currentQuestionIndex].answer[0];
-                    answerInput.value = correctAnswer.charAt(0);
                     answerInput.focus();
                 }
             }
@@ -401,12 +410,14 @@
             function resetInput() {
                 answerInput.value = '';
                 answerInput.disabled = false;
-                hintBtn.disabled = false;
+                hintUsed = false;
+                hintMessage.textContent = '';
                 answerInput.className = '';
                 feedbackMessage.textContent = '';
                 feedbackMessage.className = '';
                 checkBtn.classList.remove('hidden');
                 nextBtn.classList.add('hidden');
+                updateHintDisplay();
                 answerInput.focus();
             }
 
@@ -426,7 +437,7 @@
 
             function updateHintDisplay() {
                 hintCounter.textContent = `(${hintTokens} left)`;
-                hintBtn.disabled = hintTokens === 0;
+                hintBtn.disabled = hintTokens === 0 || hintUsed;
             }
 
             function triggerConfetti() {
