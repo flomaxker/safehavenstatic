@@ -69,6 +69,9 @@
         }
         .hidden { display: none; }
 
+        #timer-container { width: 100%; background-color: #fee2e2; border-radius: 8px; overflow: hidden; position: relative; height: 20px; margin-bottom: 1rem; }
+        #timer-bar { height: 100%; width: 100%; background-color: var(--color-accent); transition: width 1s linear; }
+        #timer-text { position: absolute; width: 100%; text-align: center; line-height: 20px; color: var(--color-white); font-weight: 600; top: 0; left: 0; pointer-events: none; }
         /* Achievements */
         #achievements-container { margin: 3rem auto; max-width: 600px; text-align: center; }
         #achievements-container h3 { color: var(--color-secondary); }
@@ -155,6 +158,10 @@
                     <div id="progress-bar" class="progress-bar"></div>
                     <div id="progress-text" class="progress-text"></div>
                 </div>
+                  <div id="timer-container" class="hidden">
+                      <div id="timer-bar" class="timer-bar"></div>
+                      <div id="timer-text" class="timer-text"></div>
+                  </div>
                 <div id="sentence-container"></div>
                 <input type="text" id="answer-input" placeholder="Type your answer" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
                 <div id="hint-message" class="hint-message"></div>
@@ -365,6 +372,9 @@
             const progressBar = document.getElementById('progress-bar');
             const progressText = document.getElementById('progress-text');
             const streakCounter = document.getElementById('streak-counter');
+            const timerContainer = document.getElementById("timer-container");
+            const timerBar = document.getElementById("timer-bar");
+            const timerText = document.getElementById("timer-text");
             const hintBtn = document.getElementById('hint-btn');
             const hintCounter = document.getElementById('hint-counter');
             const hintMessage = document.getElementById('hint-message');
@@ -401,6 +411,9 @@
             let highScores = {};
             const QUESTIONS_PER_ROUND = 10;
             const UNLOCK_SCORE = 8;
+            const TIME_PER_QUESTION = 20;
+            let timeLeft = TIME_PER_QUESTION;
+            let timerInterval;
 
             // --- Core Game Logic ---
             function startGame(category, customList) {
@@ -419,6 +432,12 @@
                 hintTokens = 3;
                 hintUsed = false;
                 wrongQuestions = [];
+                stopTimer();
+                if (category === "mixed" && !customList) {
+                    timerContainer.classList.remove("hidden");
+                } else {
+                    timerContainer.classList.add("hidden");
+                }
 
                 updateStreakDisplay();
                 updateHintDisplay();
@@ -436,6 +455,10 @@
                 sentenceContainer.textContent = question.sentence;
                 hintUsed = false;
                 hintMessage.textContent = '';
+                if (!timerContainer.classList.contains("hidden")) {
+                    stopTimer();
+                    startTimer();
+                }
                 updateHintDisplay();
             }
 
@@ -446,6 +469,7 @@
                 if (!userAnswer) return;
 
                 answerInput.disabled = true;
+                stopTimer();
                 hintBtn.disabled = true;
                 checkBtn.classList.add('hidden');
                 nextBtn.classList.remove('hidden');
@@ -499,6 +523,7 @@
             }
 
             function showCompletion() {
+                stopTimer();
                 // Update stats and save progress
                 const oldHighScore = highScores[currentCategory] || 0;
                 if (currentCategory !== 'mistakes' && score > oldHighScore) {
@@ -584,6 +609,50 @@
                 }
             }
             
+
+            function updateTimerDisplay() {
+                const percent = (timeLeft / TIME_PER_QUESTION) * 100;
+                timerBar.style.width = `${percent}%`;
+                timerText.textContent = `${timeLeft}s`;
+            }
+
+            function startTimer() {
+                timeLeft = TIME_PER_QUESTION;
+                updateTimerDisplay();
+                timerInterval = setInterval(() => {
+                    timeLeft--;
+                    if (timeLeft < 0) {
+                        clearInterval(timerInterval);
+                        handleTimeout();
+                    } else {
+                        updateTimerDisplay();
+                    }
+                }, 1000);
+            }
+
+            function stopTimer() {
+                clearInterval(timerInterval);
+            }
+
+            function handleTimeout() {
+                if (answerInput.disabled) return;
+                const correctAnswerArray = currentSentences[currentQuestionIndex].answer;
+                let message = `Time's up! Correct was: ${correctAnswerArray.join(' / ')}`;
+                const explanation = currentSentences[currentQuestionIndex].explanation || '';
+                if (explanation) {
+                    message += `. Tip: ${explanation}`;
+                }
+                feedbackMessage.textContent = message;
+                feedbackMessage.className = 'incorrect';
+                answerInput.classList.add('incorrect-answer');
+                hintBtn.disabled = true;
+                answerInput.disabled = true;
+                checkBtn.classList.add('hidden');
+                nextBtn.classList.remove('hidden');
+                wrongQuestions.push(currentSentences[currentQuestionIndex]);
+                currentStreak = 0;
+                updateStreakDisplay();
+            }
             function showToast(message) {
                 toast.textContent = message;
                 toast.classList.remove('hidden');
