@@ -603,8 +603,17 @@
                 const savedProgress = JSON.parse(localStorage.getItem('safeHavenPronounGame'));
                 if (savedProgress) {
                     highScores = savedProgress.highScores || {};
+                    let migrated = false;
+                    if (highScores.demonstratives !== undefined) {
+                        if (highScores.demonstrative === undefined || highScores.demonstrative < highScores.demonstratives) {
+                            highScores.demonstrative = highScores.demonstratives;
+                        }
+                        delete highScores.demonstratives;
+                        migrated = true;
+                    }
                     achievements = savedProgress.achievements || {};
                     soundEnabled = savedProgress.sound !== false;
+                    if (migrated) saveProgress();
                 }
             }
 
@@ -637,9 +646,12 @@
                 updateAchievementsUI();
 
                 // Update Challenge Mode button state
-                const allUnlocked = (highScores.subject >= UNLOCK_SCORE) && 
-                                    (highScores.object >= UNLOCK_SCORE) && 
-                                    (highScores.demonstrative >= UNLOCK_SCORE);
+                const demoScore = (highScores.demonstrative !== undefined)
+                                    ? highScores.demonstrative
+                                    : (highScores.demonstratives || 0);
+                const allUnlocked = (Number(highScores.subject || 0) >= UNLOCK_SCORE) &&
+                                    (Number(highScores.object || 0) >= UNLOCK_SCORE) &&
+                                    (Number(demoScore) >= UNLOCK_SCORE);
                 
                 if (allUnlocked) {
                     mixedBtn.disabled = false;
