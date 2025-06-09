@@ -84,6 +84,23 @@
         .badge.unlocked .icon { background-color: var(--color-secondary); color: var(--color-white); transform: scale(1.1); box-shadow: 0 4px 10px rgba(20, 184, 166, 0.4); }
         .badge.unlocked .title { color: var(--color-heading); }
 
+        /* Category Completion Indicator */
+        .category-btn { position: relative; }
+        .category-btn.completed {
+            background-color: var(--color-secondary);
+            color: var(--color-white);
+        }
+        .category-btn.completed::after {
+            content: '\f058';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+        }
+
         /* Tooltip for locked button */
         [data-tooltip] { position: relative; }
         [data-tooltip]:hover::after { content: attr(data-tooltip); position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background-color: #374151; color: white; padding: 0.5rem 1rem; border-radius: 4px; font-size: 0.85rem; white-space: nowrap; z-index: 10; margin-bottom: 5px; opacity: 1; transition: opacity 0.2s; }
@@ -138,9 +155,9 @@
             </div>
             <!-- Category Selection -->
             <div id="category-selection" class="hidden">
-                <button class="btn btn-primary" data-category="subject">Subject Pronouns</button>
-                <button class="btn btn-primary" data-category="object">Object Pronouns</button>
-                <button class="btn btn-primary" data-category="demonstrative">Demonstratives</button>
+                <button class="btn btn-primary category-btn" data-category="subject">Subject Pronouns</button>
+                <button class="btn btn-primary category-btn" data-category="object">Object Pronouns</button>
+                <button class="btn btn-primary category-btn" data-category="demonstrative">Demonstratives</button>
                 <button id="mixed-btn" class="btn btn-secondary" data-category="mixed" disabled>Challenge Mode</button>
             </div>
 
@@ -415,6 +432,10 @@
             let timeLeft = TIME_PER_QUESTION;
             let timerInterval;
 
+            function capitalize(str) {
+                return str.charAt(0).toUpperCase() + str.slice(1);
+            }
+
             // --- Core Game Logic ---
             function startGame(category, customList) {
                 currentCategory = category;
@@ -540,10 +561,15 @@
                 stopTimer();
                 // Update stats and save progress
                 const oldHighScore = highScores[currentCategory] || 0;
+                const wasCompleted = oldHighScore >= UNLOCK_SCORE;
                 if (currentCategory !== 'mistakes' && score > oldHighScore) {
                     highScores[currentCategory] = score;
                 }
+                const nowCompleted = !wasCompleted && (currentCategory !== 'mistakes') && (score >= UNLOCK_SCORE);
                 saveProgress();
+                if (nowCompleted) {
+                    showToast(`✅ ${capitalize(currentCategory)} category finished!`);
+                }
 
                 // Check for achievements
                 checkAndAwardAchievement('beginner', true);
@@ -731,6 +757,18 @@
             function updateUIFromState() {
                 // Update achievements display
                 updateAchievementsUI();
+
+                // Mark completed categories
+                ['subject','object','demonstrative'].forEach(cat => {
+                    const btn = document.querySelector(`#category-selection button[data-category="${cat}"]`);
+                    if (!btn) return;
+                    btn.classList.add('category-btn');
+                    if (Number(highScores[cat] || 0) >= UNLOCK_SCORE) {
+                        btn.classList.add('completed');
+                    } else {
+                        btn.classList.remove('completed');
+                    }
+                });
 
                 // Update Challenge Mode button state
                 const demoScore = (highScores.demonstrative !== undefined)
