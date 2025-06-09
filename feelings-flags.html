@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feelings Check-in | Safe Haven Dutch Coaching</title>
+    <meta name="description" content="An interactive Feelings Check-in tool for expat children and parents in Groningen to explore emotions, learn Dutch words and phrases, find coping tips, and get parental guidance.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Poppins:wght@500;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body id="page-feelings-flags">
+    <header class="header">
+        <nav class="navbar container">
+             <a href="index.html" class="logo-link">
+                 <img src="Safe Haven Banner (groot)-2.png" alt="Safe Haven Dutch Coaching Banner" class="logo-banner">
+            </a>
+
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="index.html#home" class="nav-link">Home</a></li>
+                <li><a href="index.html#about" class="nav-link">About Me</a></li>
+                <li><a href="index.html#approach" class="nav-link">Approach</a></li>
+                <li><a href="blog.html" class="nav-link">Blog</a></li>
+                <li><a href="feelings-flags.html" class="nav-link active">Feelings</a></li>
+                <li><a href="integration-checklist.html" class="nav-link">Checklist</a></li>
+                <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+            </ul>
+
+            <button class="nav-toggle" id="nav-toggle" aria-label="Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </nav>
+    </header>
+
+    <main class="page-container">
+        <h1 class="text-center" style="color: var(--color-primary);">Feelings Check-in</h1>
+        <section id="feelings-check-in" class="section-padding">
+            <div class="container">
+                <div class="tool-content">
+
+                    <p class="text-center text-light" style="max-width: 700px; margin: 0 auto 2rem auto;">Moving somewhere new brings lots of different feelings, for kids and grown-ups! Use this tool together to explore those emotions. Click an emoji that matches how you (or your child) might feel. You'll discover the Dutch word and a simple phrase, a supportive message with a small coping idea for kids, and a helpful tip for parents navigating the expat journey in Groningen.</p>
+
+                    <div class="flags-container">
+
+                        <button class="feeling-flag" data-feeling="Happy" data-dutch="Blij" data-dutch-phrase="Ik ben blij" data-child-message="Yay! Feeling happy feels great, like sunshine inside. <span class='coping-tip'>Try sharing your happy feeling with someone!</span>" data-parent-tip="Celebrate these moments! Ask what made them happy today. Linking joy to the new environment helps build positive associations.">
+                            <span class="emoji-icon">😊</span>
+                            <span>Happy</span>
+                        </button>
+                        <button class="feeling-flag" data-feeling="Sad" data-dutch="Verdrietig" data-dutch-phrase="Ik ben verdrietig" data-child-message="It's okay to feel sad. Like a rainy cloud, it will pass. <span class='coping-tip'>Maybe a warm hug or drawing about it could help?</span>" data-parent-tip="Acknowledge sadness, especially if linked to missing home or friends. Don't rush to fix it. Try: 'I see you're feeling sad. Missing [X] is hard.' Validate their feelings first.">
+                            <span class="emoji-icon">😢</span>
+                            <span>Sad</span>
+                        </button>
+                         <button class="feeling-flag" data-feeling="Angry" data-dutch="Boos" data-dutch-phrase="Ik ben boos" data-child-message="Feeling angry is like a volcano bubbling up. It's okay, but let's find safe ways to let it out. <span class='coping-tip'>Try taking 3 big dragon breaths (in deep, out 'fire'!).</span>" data-parent-tip="Anger can stem from frustration (language barriers, not fitting in). Help them name the trigger. Offer physical outlets (stomping feet, drawing the anger) before talking calmly.">
+                            <span class="emoji-icon">😠</span>
+                            <span>Angry</span>
+                        </button>
+                         <button class="feeling-flag" data-feeling="Scared" data-dutch="Bang" data-dutch-phrase="Ik ben bang" data-child-message="Feeling scared or worried is like having butterflies in your tummy. It's okay, you are safe. <span class='coping-tip'>Take a slow, deep breath and tell a grown-up how you feel.</span>" data-parent-tip="New situations (school, making friends) often cause anxiety. Break down the scary situation into smaller steps. Reassure them of your support and predictability at home.">
+                            <span class="emoji-icon">😟</span>
+                            <span>Worried</span>
+                        </button>
+                        <button class="feeling-flag" data-feeling="Excited" data-dutch="Opgewonden" data-dutch-phrase="Ik ben opgewonden" data-child-message="Woohoo! Feeling excited is like fizzy bubbles popping! <span class='coping-tip'>You could draw or tell someone what you're excited about!</span>" data-parent-tip="Channel excitement about new experiences! Explore local parks, events, or foods together. Positive anticipation helps balance out the challenges of adjusting.">
+                            <span class="emoji-icon">🤩</span>
+                            <span>Excited</span>
+                        </button>
+                        <button class="feeling-flag" data-feeling="Proud" data-dutch="Trots" data-dutch-phrase="Ik ben trots" data-child-message="Feeling proud is like standing tall after climbing a mountain! You did something great. <span class='coping-tip'>Remember this feeling! Maybe tell someone what you did?</span>" data-parent-tip="Notice and praise effort, not just results, especially in language learning or trying new things. 'I saw you try to ask for that in Dutch, I'm so proud of you for trying!'">
+                            <span class="emoji-icon">😎</span>
+                            <span>Proud</span>
+                        </button>
+                         <button class="feeling-flag" data-feeling="Confused" data-dutch="Verward" data-dutch-phrase="Ik voel me verward" data-child-message="Feeling confused is like having tangled wool in your head. It's okay to not understand everything. <span class='coping-tip'>It's okay to pause and ask questions if you need help.</span>" data-parent-tip="Validate confusion, especially with language or cultural differences. 'It's confusing when things are different, isn't it? What part feels tricky?' Be patient and explain simply.">
+                            <span class="emoji-icon">😕</span>
+                            <span>Confused</span>
+                        </button>
+                        <button class="feeling-flag" data-feeling="Shy" data-dutch="Verlegen" data-dutch-phrase="Ik ben verlegen" data-child-message="Feeling shy is like wanting to hide in your shell for a bit. That's okay. <span class='coping-tip'>Maybe start with just a little wave or a quiet smile?</span>" data-parent-tip="Don't push a shy child into social situations too quickly. Practice simple greetings at home. Arrange low-pressure playdates (one-on-one first) with shared activities.">
+                            <span class="emoji-icon">😳</span>
+                            <span>Shy</span>
+                        </button>
+                        <button class="feeling-flag" data-feeling="Different" data-dutch="Anders" data-dutch-phrase="Ik voel me anders" data-child-message="Sometimes feeling different is okay. Everyone is unique, like different flowers in a garden. <span class='coping-tip'>Your differences make you special and interesting!</span>" data-parent-tip="Acknowledge that feeling different is common for TCKs. Focus on the strengths diversity brings. Connect them with other international families if possible, while also encouraging local connections.">
+                            <span class="emoji-icon">🤔</span>
+                            <span>Different</span>
+                        </button>
+                         <button class="feeling-flag" data-feeling="Lonely" data-dutch="Alleen" data-dutch-phrase="Ik voel me alleen" data-child-message="Feeling lonely is like being on an island all by yourself. It's okay to miss people. <span class='coping-tip'>Could you draw a picture for someone you miss, or ask for a hug?</span>" data-parent-tip="Acknowledge the feeling directly. Help them identify *who* or *what* they miss. Schedule video calls with loved ones back home. Gently encourage joining one low-pressure local group activity or arrange a playdate.">
+                            <span class="emoji-icon">😔</span>
+                            <span>Lonely</span>
+                        </button>
+                        <button class="feeling-flag" data-feeling="Frustrated" data-dutch="Gefrustreerd" data-dutch-phrase="Ik ben gefrustreerd" data-child-message="Grrr! Feeling frustrated is like being stuck in sticky mud. <span class='coping-tip'>Take a deep breath, and maybe try again in a little bit?</span>" data-parent-tip="Validate the frustration, especially with language hurdles ('It *is* hard when words don't come out right!'). Break down challenging tasks. Offer support but encourage perseverance. Celebrate the effort, not just the outcome.">
+                            <span class="emoji-icon">😤</span>
+                            <span>Frustrated</span>
+                        </button>
+                         <button class="feeling-flag" data-feeling="Curious" data-dutch="Nieuwsgierig" data-dutch-phrase="Ik ben nieuwsgierig" data-child-message="Ooh, what's that? Feeling curious means your brain wants to explore and learn new things! <span class='coping-tip'>Keep asking questions and looking closely!</span>" data-parent-tip="Foster this! Visit local libraries, museums, markets, or parks. Ask open-ended questions ('What do you notice that's different here?'). Curiosity is a great engine for adaptation and learning.">
+                            <span class="emoji-icon">🧐</span>
+                            <span>Curious</span>
+                        </button>
+                        <button class="feeling-flag" data-feeling="Tired" data-dutch="Moe" data-dutch-phrase="Ik ben moe" data-child-message="Feeling tired means your body and brain need some rest, like a phone needing charging. <span class='coping-tip'>Maybe find a quiet spot to relax for a few minutes?</span>" data-parent-tip="Adjusting is exhausting, physically and mentally. Ensure consistent sleep routines. Don't overschedule; allow for unstructured downtime. Recognize that emotional effort (like speaking a new language all day) is tiring.">
+                            <span class="emoji-icon">😴</span>
+                            <span>Tired</span>
+                        </button>
+                         <button class="feeling-flag" data-feeling="Bored" data-dutch="Verveeld" data-dutch-phrase="Ik verveel me" data-child-message="Feeling bored is like waiting for something fun to happen. <span class='coping-tip'>Let's think of one new thing we could try or explore!</span>" data-parent-tip="Help them brainstorm activities, mixing familiar comforts with exploring the new environment (e.g., visit a playground, try a Dutch board game, start a creative project). Sometimes boredom leads to the best ideas!">
+                            <span class="emoji-icon">😑</span>
+                            <span>Bored</span>
+                        </button>
+                         <button class="feeling-flag" data-feeling="Grateful" data-dutch="Dankbaar" data-dutch-phrase="Ik ben dankbaar" data-child-message="Feeling grateful is like a warm hug inside for the good things and kind people you know. <span class='coping-tip'>Think of one thing you feel thankful for right now.</span>" data-parent-tip="Model gratitude. Ask 'What was one nice thing that happened today?' or 'Who were you thankful for today?'. Point out positive aspects of your new life, however small. Gratitude builds resilience and positive focus.">
+                            <span class="emoji-icon">🙏</span>
+                            <span>Grateful</span>
+                        </button>
+                         <button class="feeling-flag" data-feeling="Overwhelmed" data-dutch="Overweldigd" data-dutch-phrase="Ik voel me overweldigd" data-child-message="Feeling overwhelmed is like having too many bees buzzing in your head! It's okay to pause. <span class='coping-tip'>Let's focus on just one small thing right now.</span>" data-parent-tip="Simplify routines and choices temporarily. Focus on one thing at a time. Provide extra predictability and reassurance at home. Validate the feeling: 'It feels like a lot all at once, doesn't it? Let's just focus on [one small thing] right now.'">
+                            <span class="emoji-icon">🤯</span>
+                            <span>Overwhelmed</span>
+                        </button>
+                    </div>
+
+                    <div id="selected-feeling-display" class="feeling-output-area hidden-display">
+                        <h3 id="display-dutch-word"></h3>
+                        <p id="display-dutch-phrase" class="dutch-phrase"></p>
+                        <p id="display-child-message"></p>
+                        <div id="display-parent-tip">
+                            <h4>Tip for Parents:</h4>
+                            <p></p> </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+             <section id="calm-waters" class="section-padding">
+            <div class="container content-section-layout">
+
+                <div class="content-text slide-up">
+                    <h2 class="text-secondary"><span class="emoji">⛵</span> Finding Calm Waters</h2>
+                    <p>Adjusting to a new place takes time. Like a gentle boat finding its way, we provide the steady support and calm space your child needs to navigate their integration journey.</p>
+                    <p>At Safe Haven, we focus on building confidence and well-being alongside language skills, helping your child feel truly anchored and at ease in Groningen.</p>
+
+                    <p class="text-center text-light" style="max-width: 700px; margin: 0 auto 2.5rem auto;">
+                        <a href="index.html#contact" class="btn btn-primary checklist-cta-button">Need Help Understanding Feelings? Book a Free Chat!</a>
+                        <p style="text-align: center;"><a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Home</a></p>
+                    </p>
+                </div>
+
+                 <div class="content-image slide-up delay-1">
+                    <video class="section-image-video" autoplay loop muted playsinline poster="/paper-boat.jpg">
+                        <source src="/paper-boat.webm" type="video/webm">
+                        <source src="/paper-boat.mp4" type="video/mp4">
+                    </video>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <!-- Footer content will be loaded here by JavaScript -->
+    </footer>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
