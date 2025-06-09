@@ -63,6 +63,9 @@
         .new-high-score { color: var(--color-accent); font-weight: 700; }
         .hidden { display: none; }
 
+        #timer-container { width: 100%; background-color: #fee2e2; border-radius: 8px; overflow: hidden; position: relative; height: 20px; margin-bottom: 1rem; }
+        #timer-bar { height: 100%; width: 100%; background-color: var(--color-accent); transition: width 1s linear; }
+        #timer-text { position: absolute; width: 100%; text-align: center; line-height: 20px; color: var(--color-white); font-weight: 600; top: 0; left: 0; pointer-events: none; }
         /* Achievements */
         #achievements-container { margin: 3rem auto; max-width: 600px; text-align: center; }
         #achievements-container h3 { color: var(--color-secondary); }
@@ -149,6 +152,10 @@
                     <div id="progress-bar" class="progress-bar"></div>
                     <div id="progress-text" class="progress-text"></div>
                 </div>
+                  <div id="timer-container" class="hidden">
+                      <div id="timer-bar" class="timer-bar"></div>
+                      <div id="timer-text" class="timer-text"></div>
+                  </div>
                 <div id="sentence-container"></div>
                 <input type="text" id="answer-input" placeholder="Type your answer" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
                 <div id="hint-message" class="hint-message"></div>
@@ -201,6 +208,10 @@
                         <div class="icon"><i class="fas fa-crown"></i></div>
                         <p class="title">Pronoun Pro</p>
                     </div>
+                    <div id="badge-master" class="badge locked" data-tooltip="Unlock all achievements">
+                        <div class="icon"><i class="fas fa-trophy"></i></div>
+                        <p class="title">Master</p>
+                    </div>
                 </div>
             </div>
             
@@ -228,6 +239,36 @@
                 { category: 'subject', sentence: '(Formal) Goedemorgen, heeft ___ een moment tijd?', answer: ['u'], explanation: 'Formal "you" is "u".' },
                 { category: 'subject', sentence: 'Vandaag ga ___ vroeg naar huis.', answer: ['ik'], explanation: 'Talking about yourself again uses "ik".' },
                 { category: 'subject', sentence: 'De kinderen spelen buiten. ___ maken veel lawaai.', answer: ['zij', 'ze'], explanation: '"De kinderen" is plural, so "zij/ze".' },
+                { category: 'subject', sentence: 'Sarah en Tim gaan naar het park. ___ nemen hun hond mee.', answer: ['zij', 'ze'], explanation: 'Plural people use "zij/ze".' },
+                { category: 'subject', sentence: 'Mijn collega is boos. ___ heeft een fout gemaakt.', answer: ['hij'], explanation: 'Male colleague -> "hij".' },
+                { category: 'subject', sentence: 'De leraren vergaderen nu. ___ bespreken de planning.', answer: ['zij', 'ze'], explanation: 'Plural -> "zij/ze".' },
+                { category: 'subject', sentence: '(Formal) Mevrouw, ___ kunt hier plaatsnemen.', answer: ['u'], explanation: 'Formal address uses "u".' },
+                { category: 'subject', sentence: 'Jij en ik gaan morgen wandelen. ___ hebben er zin in.', answer: ['wij', 'we'], explanation: '"Jij en ik" becomes "wij/we".' },
+                { category: 'subject', sentence: 'De bus komt eraan. ___ komt al!', answer: ['hij'], explanation: '"Bus" is a de-word, so "hij".' },
+                { category: 'subject', sentence: 'De hond kwispelt. ___ is blij.', answer: ['hij'], explanation: 'Animals with de-word often take "hij".' },
+                { category: 'subject', sentence: 'De lamp brandt niet. ___ is stuk.', answer: ['hij'], explanation: '"Lamp" is de-word -> "hij".' },
+                { category: 'subject', sentence: 'De huizen zijn duur. ___ kosten veel geld.', answer: ['zij', 'ze'], explanation: 'Plural nouns -> "zij/ze".' },
+                { category: 'subject', sentence: 'Emma, wil ___ nog koffie?', answer: ['jij', 'je'], explanation: 'Talking to Emma informally uses "jij/je".' },
+                { category: 'subject', sentence: 'Mijn ouders komen morgen. ___ blijven twee dagen.', answer: ['zij', 'ze'], explanation: 'Plural people -> "zij/ze".' },
+                { category: 'subject', sentence: 'Dit boek is oud. ___ heeft een scheur.', answer: ['het'], explanation: 'Het-word subject stays "het".' },
+                { category: 'subject', sentence: 'Luca en jij werken samen. ___ maken een presentatie.', answer: ['jullie'], explanation: 'Addressing someone plus "jij" -> "jullie".' },
+                { category: 'subject', sentence: 'Ik heb een nieuwe fiets. ___ rijdt heerlijk.', answer: ['hij'], explanation: '"Fiets" is de-word -> "hij".' },
+                { category: 'subject', sentence: 'Mijn buurvrouw is ziek. ___ blijft thuis.', answer: ['zij'], explanation: 'Female person -> "zij".' },
+                { category: 'subject', sentence: 'De meiden lachen. ___ hebben lol.', answer: ['zij', 'ze'], explanation: 'Plural feminine -> "zij/ze".' },
+                { category: 'subject', sentence: 'Waar woon ___ eigenlijk?', answer: ['jij', 'je'], explanation: 'Informal question uses "jij/je".' },
+                { category: 'subject', sentence: 'Onze buren verhuizen. ___ gaan naar België.', answer: ['zij', 'ze'], explanation: 'Plural -> "zij/ze".' },
+                { category: 'subject', sentence: 'Het kind huilt. ___ is moe.', answer: ['het'], explanation: '"Kind" is het-word -> "het".' },
+                { category: 'subject', sentence: 'Deze koekjes zijn vers. ___ ruiken heerlijk.', answer: ['ze'], explanation: 'Plural objects -> "ze".' },
+                { category: 'subject', sentence: 'Het museum opent om tien uur. ___ is gratis vandaag.', answer: ['het'], explanation: '"Museum" is het-word -> "het".' },
+                { category: 'subject', sentence: 'Mijn team en ik winnen vaak. ___ trainen hard.', answer: ['wij', 'we'], explanation: '"Mijn team en ik" -> "wij/we".' },
+                { category: 'subject', sentence: 'De vakantie is voorbij. ___ was te kort.', answer: ['hij'], explanation: 'De-word "vakantie" often uses "hij".' },
+                { category: 'subject', sentence: 'De soep is nog heet. ___ brandt mijn tong.', answer: ['ze'], explanation: 'De-word food can use "ze".' },
+                { category: 'subject', sentence: 'Floris is laat. ___ komt altijd te laat.', answer: ['hij'], explanation: 'Floris is male -> "hij".' },
+                { category: 'subject', sentence: 'Dit huis is groot. ___ heeft vier slaapkamers.', answer: ['het'], explanation: '"Huis" is het-word -> "het".' },
+                { category: 'subject', sentence: 'Mijn vrienden en ik gaan kamperen. ___ nemen tenten mee.', answer: ['wij', 'we'], explanation: '"Vrienden en ik" -> "wij/we".' },
+                { category: 'subject', sentence: 'De auto start niet. ___ heeft geen benzine.', answer: ['hij'], explanation: '"Auto" is de-word -> "hij".' },
+                { category: 'subject', sentence: 'Kinderen, willen ___ wat drinken?', answer: ['jullie'], explanation: 'Addressing children -> "jullie".' },
+                { category: 'subject', sentence: 'Het weer verandert. ___ wordt kouder.', answer: ['het'], explanation: 'Weather/conditions use "het".' },
 
                 { category: 'object', sentence: 'Ik zie de postbode. Ik geef ___ een brief.', answer: ['hem'], explanation: 'Use "hem" for a male person.' },
                 { category: 'object', sentence: 'Mijn vriendin is jarig. Ik bel ___ meteen.', answer: ['haar'], explanation: 'Female person -> "haar".' },
@@ -239,6 +280,36 @@
                 { category: 'object', sentence: 'Kijk naar ___! Ik heb een nieuwe jas.', answer: ['mij', 'me'], explanation: 'Pointing to yourself uses "mij/me".' },
                 { category: 'object', sentence: '(Formal) Meneer, kan ik ___ iets vragen?', answer: ['u'], explanation: 'Formal object pronoun is "u".' },
                 { category: 'object', sentence: 'Wij hebben honger. De ober brengt ___ de menukaart.', answer: ['ons'], explanation: 'First person plural object is "ons".' },
+                { category: 'object', sentence: 'Ik zoek mijn sleutels. Heb jij ___ gezien?', answer: ['ze'], explanation: 'Plural things use "ze".' },
+                { category: 'object', sentence: 'Onze docent legt ___ de oefening uit.', answer: ['ons'], explanation: 'First person plural object -> "ons".' },
+                { category: 'object', sentence: 'De kat miauwt. Ik geef ___ eten.', answer: ['hem'], explanation: 'Animal (de-word) -> "hem".' },
+                { category: 'object', sentence: 'Ik heb goede vrienden. Ik vertrouw ___ volledig.', answer: ['hen'], explanation: 'Plural people -> "hen".' },
+                { category: 'object', sentence: 'Wat vind je van mijn schoenen? Vind je ___ mooi?', answer: ['ze'], explanation: 'Plural objects -> "ze".' },
+                { category: 'object', sentence: 'Het spijt me. Kun je ___ vergeven?', answer: ['mij', 'me'], explanation: 'First person object pronoun.' },
+                { category: 'object', sentence: 'Mijn ouders bezoeken ons vaak. We zien ___ elke week.', answer: ['hen'], explanation: 'Plural people -> "hen".' },
+                { category: 'object', sentence: '(Formal) Kan ik ___ helpen, mevrouw?', answer: ['u'], explanation: 'Formal object pronoun is "u".' },
+                { category: 'object', sentence: 'Je broer is hier. Ik heb ___ net gesproken.', answer: ['hem'], explanation: 'Male person -> "hem".' },
+                { category: 'object', sentence: 'De kinderen zijn druk. Ik moet ___ even aanspreken.', answer: ['ze'], explanation: 'Addressing a group -> "ze".' },
+                { category: 'object', sentence: 'Zij kent die acteur. Heb jij ___ ook ontmoet?', answer: ['hem'], explanation: 'Male person -> "hem".' },
+                { category: 'object', sentence: 'De telefoon is kapot. Ik moet ___ laten repareren.', answer: ['hem'], explanation: 'De-word object -> "hem".' },
+                { category: 'object', sentence: 'Ik lees dat boek graag. Wil je ___ lenen?', answer: ['het'], explanation: 'Het-word object remains "het".' },
+                { category: 'object', sentence: 'We zagen Sara gisteren. Heb je ___ nog gebeld?', answer: ['haar'], explanation: 'Female person -> "haar".' },
+                { category: 'object', sentence: 'Hij heeft een nieuwe baan. Ik feliciteer ___.', answer: ['hem'], explanation: 'Male person -> "hem".' },
+                { category: 'object', sentence: 'Ik hou van bloemen. Ik koop ___ vaak voor mezelf.', answer: ['ze'], explanation: 'Plural objects -> "ze".' },
+                { category: 'object', sentence: 'Maak jij dit huiswerk? Ik kan ___ later nakijken.', answer: ['het'], explanation: 'Het-word -> "het".' },
+                { category: 'object', sentence: 'De buurman is aardig. Iedereen groet ___.', answer: ['hem'], explanation: 'Male neighbour -> "hem".' },
+                { category: 'object', sentence: 'Ik begrijp deze zin niet. Kun je ___ uitleggen?', answer: ['hem'], explanation: 'De-word "zin" -> "hem".' },
+                { category: 'object', sentence: 'Ik heb nieuwe buren. Ik moet ___ nog leren kennen.', answer: ['ze'], explanation: 'Plural -> "ze".' },
+                { category: 'object', sentence: 'De lerares helpt de studenten. Ze ondersteunt ___ goed.', answer: ['hen'], explanation: 'Plural people -> "hen".' },
+                { category: 'object', sentence: 'Waar is je jas? Ik zie ___ nergens.', answer: ['hem'], explanation: 'De-word "jas" -> "hem".' },
+                { category: 'object', sentence: 'Het feestje was leuk. Ik vond ___ fantastisch.', answer: ['het'], explanation: 'Refers to previous event -> "het".' },
+                { category: 'object', sentence: 'Onze hond is oud. We verzorgen ___ goed.', answer: ['hem'], explanation: 'Animal -> "hem".' },
+                { category: 'object', sentence: 'Kunnen jullie ___ horen?', answer: ['mij', 'me'], explanation: 'First person object pronoun.' },
+                { category: 'object', sentence: 'De docent geeft ___ huiswerk mee.', answer: ['jullie'], explanation: 'Addressing a group -> "jullie".' },
+                { category: 'object', sentence: 'Ik koop deze tassen. Wil jij ___ dragen?', answer: ['ze'], explanation: 'Plural objects -> "ze".' },
+                { category: 'object', sentence: 'Je fiets staat daar. Ik heb ___ gerepareerd.', answer: ['hem'], explanation: 'De-word "fiets" -> "hem".' },
+                { category: 'object', sentence: 'Hij heeft de kinderen gezien. Hij bracht ___ een cadeau.', answer: ['hen'], explanation: 'Plural children -> "hen".' },
+                { category: 'object', sentence: 'Mag ik ___ iets vragen?', answer: ['jou'], explanation: 'Informal singular object is "jou".' },
 
                 { category: 'demonstrative', sentence: '___ boek hier is erg spannend. (het-woord)', answer: ['dit'], explanation: 'Het-word nearby -> "dit".' },
                 { category: 'demonstrative', sentence: 'Zie je ___ man daar? (de-woord)', answer: ['die'], explanation: 'De-word far away -> "die".' },
@@ -250,6 +321,36 @@
                 { category: 'demonstrative', sentence: 'Vind je ___ jurk daar in de etalage mooi?', answer: ['die'], explanation: 'De-word far away -> "die".' },
                 { category: 'demonstrative', sentence: '___ is een goed idee!', answer: ['dat'], explanation: 'Referring to a previously mentioned idea uses "dat".' },
                 { category: 'demonstrative', sentence: 'Is ___ jouw glas hier?', answer: ['dit'], explanation: 'Het-word close by -> "dit".' },
+                { category: 'demonstrative', sentence: '___ tafel hier is van hout. (de-woord)', answer: ['deze'], explanation: 'De-word near -> "deze".' },
+                { category: 'demonstrative', sentence: 'Ik hou van ___ boek daar. (het-woord)', answer: ['dat'], explanation: 'Het-word far -> "dat".' },
+                { category: 'demonstrative', sentence: '___ kinderen hier spelen luid. (de-woord)', answer: ['deze'], explanation: 'Plural near -> "deze".' },
+                { category: 'demonstrative', sentence: 'Wie is ___ vrouw daar? (de-woord)', answer: ['die'], explanation: 'De-word far -> "die".' },
+                { category: 'demonstrative', sentence: '___ idee vind ik goed!', answer: ['dit'], explanation: 'Referring to something just mentioned -> "dit".' },
+                { category: 'demonstrative', sentence: '___ auto daar is erg duur. (de-woord)', answer: ['die'], explanation: 'De-word far -> "die".' },
+                { category: 'demonstrative', sentence: 'Probeer ___ gerecht hier eens. (het-woord)', answer: ['dit'], explanation: 'Het-word near -> "dit".' },
+                { category: 'demonstrative', sentence: 'Ik wil ___ appels daar. (de-woord)', answer: ['die'], explanation: 'Plural far -> "die".' },
+                { category: 'demonstrative', sentence: '___ gebouw hier is modern. (het-woord)', answer: ['dit'], explanation: 'Het-word near -> "dit".' },
+                { category: 'demonstrative', sentence: 'Is ___ jouw tas daar? (de-woord)', answer: ['die'], explanation: 'De-word far -> "die".' },
+                { category: 'demonstrative', sentence: '___ schoenen hier passen goed. (de-woord)', answer: ['deze'], explanation: 'Plural near -> "deze".' },
+                { category: 'demonstrative', sentence: 'Kun je ___ foto daar zien? (de-woord)', answer: ['die'], explanation: 'De-word far -> "die".' },
+                { category: 'demonstrative', sentence: 'Ik neem ___ glas hier. (het-woord)', answer: ['dit'], explanation: 'Het-word near -> "dit".' },
+                { category: 'demonstrative', sentence: '___ mensen daar wachten op de bus. (de-woord)', answer: ['die'], explanation: 'Plural far -> "die".' },
+                { category: 'demonstrative', sentence: 'Wat kost ___ horloge hier? (het-woord)', answer: ['dit'], explanation: 'Het-word near -> "dit".' },
+                { category: 'demonstrative', sentence: '___ boeken daar zijn interessant. (het-woord)', answer: ['die'], explanation: 'Het-word plural far -> "die".' },
+                { category: 'demonstrative', sentence: 'Kijk naar ___ vogel daar boven. (de-woord)', answer: ['die'], explanation: 'De-word far -> "die".' },
+                { category: 'demonstrative', sentence: '___ pakket hier is voor jou. (het-woord)', answer: ['dit'], explanation: 'Het-word near -> "dit".' },
+                { category: 'demonstrative', sentence: 'Hoeveel kost ___ bloemen hier? (de-woord)', answer: ['deze'], explanation: 'Plural near -> "deze".' },
+                { category: 'demonstrative', sentence: 'Ik hoef ___ taart daar niet. (de-woord)', answer: ['die'], explanation: 'De-word far -> "die".' },
+                { category: 'demonstrative', sentence: '___ scherm hier is kapot. (het-woord)', answer: ['dit'], explanation: 'Het-word near -> "dit".' },
+                { category: 'demonstrative', sentence: 'Zie je ___ bergen daar in de verte? (de-woord)', answer: ['die'], explanation: 'Plural far -> "die".' },
+                { category: 'demonstrative', sentence: 'Ik koop ___ stoel hier. (de-woord)', answer: ['deze'], explanation: 'De-word near -> "deze".' },
+                { category: 'demonstrative', sentence: '___ stuk taart hier is heerlijk. (het-woord)', answer: ['dit'], explanation: 'Het-word near -> "dit".' },
+                { category: 'demonstrative', sentence: 'We bezoeken ___ stad daar morgen. (de-woord)', answer: ['die'], explanation: 'De-word far -> "die".' },
+                { category: 'demonstrative', sentence: 'Kun je ___ papier hier geven? (het-woord)', answer: ['dit'], explanation: 'Het-word near -> "dit".' },
+                { category: 'demonstrative', sentence: '___ kast daar is oud. (de-woord)', answer: ['die'], explanation: 'De-word far -> "die".' },
+                { category: 'demonstrative', sentence: 'Ik neem ___ messen hier. (de-woord)', answer: ['deze'], explanation: 'Plural near -> "deze".' },
+                { category: 'demonstrative', sentence: '___ foto hier is van mijn vakantie. (de-woord)', answer: ['deze'], explanation: 'De-word near -> "deze".' },
+                { category: 'demonstrative', sentence: '___ strand daar is druk in de zomer. (het-woord)', answer: ['dat'], explanation: 'Het-word far -> "dat".' },
             ];
 
             // --- DOM Elements ---
@@ -264,6 +365,9 @@
             const progressBar = document.getElementById('progress-bar');
             const progressText = document.getElementById('progress-text');
             const streakCounter = document.getElementById('streak-counter');
+            const timerContainer = document.getElementById("timer-container");
+            const timerBar = document.getElementById("timer-bar");
+            const timerText = document.getElementById("timer-text");
             const hintBtn = document.getElementById('hint-btn');
             const hintCounter = document.getElementById('hint-counter');
             const hintMessage = document.getElementById('hint-message');
@@ -299,6 +403,9 @@
             let highScores = {};
             const QUESTIONS_PER_ROUND = 10;
             const UNLOCK_SCORE = 8;
+            const TIME_PER_QUESTION = 20;
+            let timeLeft = TIME_PER_QUESTION;
+            let timerInterval;
 
             // --- Core Game Logic ---
             function startGame(category, customList) {
@@ -317,6 +424,12 @@
                 hintTokens = 3;
                 hintUsed = false;
                 wrongQuestions = [];
+                stopTimer();
+                if (category === "mixed" && !customList) {
+                    timerContainer.classList.remove("hidden");
+                } else {
+                    timerContainer.classList.add("hidden");
+                }
 
                 updateStreakDisplay();
                 updateHintDisplay();
@@ -333,6 +446,10 @@
                 sentenceContainer.textContent = question.sentence;
                 hintUsed = false;
                 hintMessage.textContent = '';
+                if (!timerContainer.classList.contains("hidden")) {
+                    stopTimer();
+                    startTimer();
+                }
                 updateHintDisplay();
             }
 
@@ -343,6 +460,7 @@
                 if (!userAnswer) return;
 
                 answerInput.disabled = true;
+                stopTimer();
                 hintBtn.disabled = true;
                 checkBtn.classList.add('hidden');
                 nextBtn.classList.remove('hidden');
@@ -396,6 +514,7 @@
             }
 
             function showCompletion() {
+                stopTimer();
                 // Update stats and save progress
                 const oldHighScore = highScores[currentCategory] || 0;
                 if (currentCategory !== 'mistakes' && score > oldHighScore) {
@@ -479,6 +598,50 @@
                 }
             }
             
+
+            function updateTimerDisplay() {
+                const percent = (timeLeft / TIME_PER_QUESTION) * 100;
+                timerBar.style.width = `${percent}%`;
+                timerText.textContent = `${timeLeft}s`;
+            }
+
+            function startTimer() {
+                timeLeft = TIME_PER_QUESTION;
+                updateTimerDisplay();
+                timerInterval = setInterval(() => {
+                    timeLeft--;
+                    if (timeLeft < 0) {
+                        clearInterval(timerInterval);
+                        handleTimeout();
+                    } else {
+                        updateTimerDisplay();
+                    }
+                }, 1000);
+            }
+
+            function stopTimer() {
+                clearInterval(timerInterval);
+            }
+
+            function handleTimeout() {
+                if (answerInput.disabled) return;
+                const correctAnswerArray = currentSentences[currentQuestionIndex].answer;
+                let message = `Time's up! Correct was: ${correctAnswerArray.join(' / ')}`;
+                const explanation = currentSentences[currentQuestionIndex].explanation || '';
+                if (explanation) {
+                    message += `. Tip: ${explanation}`;
+                }
+                feedbackMessage.textContent = message;
+                feedbackMessage.className = 'incorrect';
+                answerInput.classList.add('incorrect-answer');
+                hintBtn.disabled = true;
+                answerInput.disabled = true;
+                checkBtn.classList.add('hidden');
+                nextBtn.classList.remove('hidden');
+                wrongQuestions.push(currentSentences[currentQuestionIndex]);
+                currentStreak = 0;
+                updateStreakDisplay();
+            }
             function showToast(message) {
                 toast.textContent = message;
                 toast.classList.remove('hidden');
@@ -511,6 +674,19 @@
                     const badge = document.getElementById(`badge-${id}`);
                     const message = badge.getAttribute('data-tooltip');
                     showToast(`🏆 Achievement Unlocked: ${message}!`);
+                    checkMastery();
+                }
+            }
+
+            function checkMastery() {
+                const required = ['beginner', 'specialist', 'onfire', 'pro'];
+                const allDone = required.every(key => achievements[key]);
+                if (allDone && !achievements['master']) {
+                    achievements['master'] = true;
+                    saveProgress();
+                    updateAchievementsUI();
+                    showToast('🎊 You unlocked all achievements! You\'re a Pronoun Master!');
+                    triggerConfetti();
                 }
             }
             
