@@ -599,10 +599,16 @@
                 startScreen.classList.add("hidden");
                 categorySelection.classList.remove("hidden");
             });
+            // Allow answering the question with Enter while the input is active
             answerInput.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter' && !checkBtn.classList.contains('hidden')) {
                     checkAnswer();
-                } else if (e.key === 'Enter' && !nextBtn.classList.contains('hidden')) {
+                }
+            });
+
+            // Also listen globally so Enter can advance to the next question
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && !nextBtn.classList.contains('hidden')) {
                     nextQuestion();
                 }
             });
