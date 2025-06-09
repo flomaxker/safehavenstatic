@@ -3,6 +3,7 @@
     --color-primary: #2563eb; /* Blue */
     --color-secondary: #14b8a6; /* Teal */
     --color-accent: #ec4899; /* Pink (optional accent) */
+    --color-success: #16a34a; /* Green for completed categories */
     --color-text: #374151; /* Gray-700 */
     --color-text-light: #6b7280; /* Gray-500 */
     --color-heading: #1f2937; /* Gray-800 */
