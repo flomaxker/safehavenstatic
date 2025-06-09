@@ -672,8 +672,15 @@
                 const savedProgress = JSON.parse(localStorage.getItem('safeHavenPronounGame'));
                 if (savedProgress) {
                     highScores = savedProgress.highScores || {};
+                    let migrated = false;
+                    if (highScores.demonstratives !== undefined && highScores.demonstrative === undefined) {
+                        highScores.demonstrative = highScores.demonstratives;
+                        delete highScores.demonstratives;
+                        migrated = true;
+                    }
                     achievements = savedProgress.achievements || {};
                     soundEnabled = savedProgress.sound !== false;
+                    if (migrated) saveProgress();
                 }
             }
 
