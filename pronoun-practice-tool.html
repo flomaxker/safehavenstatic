@@ -60,7 +60,13 @@
         #completion-stats { display: flex; justify-content: center; gap: 2rem; margin: 1rem 0 2rem 0; text-align: center; flex-wrap: wrap; }
         .stat-item h4 { color: var(--color-text-light); margin-bottom: 0.25rem; font-size: 1rem; font-weight: 500; }
         .stat-item p { color: var(--color-primary); font-size: 1.8rem; font-weight: 700; margin: 0; }
-        .new-high-score { color: var(--color-accent); font-weight: 700; }
+        .new-high-score {
+            color: var(--color-accent);
+            font-weight: 700;
+            font-size: 1rem;
+            margin-top: 0.25rem;
+            display: block;
+        }
         .hidden { display: none; }
 
         /* Achievements */
@@ -174,6 +180,7 @@
                     <div class="stat-item">
                         <h4>High Score</h4>
                         <p id="high-score">0 / 10</p>
+                        <p id="new-high-score-message" class="new-high-score hidden">New Best!</p>
                     </div>
                 </div>
                 <button id="play-again-btn" class="btn btn-primary">Play Another Round</button>
@@ -270,6 +277,7 @@
             const finalScoreEl = document.getElementById('final-score');
             const finalStreakEl = document.getElementById('final-streak');
             const highScoreEl = document.getElementById('high-score');
+            const newHighScoreMessage = document.getElementById('new-high-score-message');
             const playAgainBtn = document.getElementById('play-again-btn');
             const practiceMistakesBtn = document.getElementById('practice-mistakes-btn');
             const mixedBtn = document.getElementById('mixed-btn');
@@ -320,6 +328,7 @@
 
                 updateStreakDisplay();
                 updateHintDisplay();
+                newHighScoreMessage.classList.add('hidden');
                 categorySelection.classList.add('hidden');
                 completionScreen.classList.add('hidden');
                 practiceArea.classList.remove('hidden');
@@ -420,7 +429,9 @@
                 }
                 const isNewHighScore = score > oldHighScore && score > 0 && currentCategory !== 'mistakes';
                 if (isNewHighScore) {
-                    highScoreEl.innerHTML += ` <span class="new-high-score">New Best!</span>`;
+                    newHighScoreMessage.classList.remove('hidden');
+                } else {
+                    newHighScoreMessage.classList.add('hidden');
                 }
 
                 practiceMistakesBtn.classList.toggle('hidden', wrongQuestions.length === 0);
