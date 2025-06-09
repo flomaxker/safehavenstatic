@@ -30,6 +30,8 @@
         #hint-btn { background: none; border: 1px solid var(--color-text-light); color: var(--color-text-light); padding: 0.2rem 0.6rem; border-radius: 4px; cursor: pointer; transition: all 0.2s ease; }
         #hint-btn:hover:not(:disabled) { background-color: var(--color-primary); color: var(--color-white); border-color: var(--color-primary); }
         #hint-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        #sound-toggle { background: none; border: 1px solid var(--color-text-light); color: var(--color-text-light); padding: 0.2rem 0.6rem; border-radius: 4px; cursor: pointer; transition: all 0.2s ease; }
+        #sound-toggle:hover { background-color: var(--color-primary); color: var(--color-white); border-color: var(--color-primary); }
         #streak-counter { font-size: 1.5rem; color: var(--color-primary); font-weight: 700; }
         #sentence-container { font-size: 1.5rem; color: var(--color-heading); margin-bottom: 1.5rem; line-height: 1.6; text-align: center; min-height: 70px; }
         #answer-input { display: block; width: 100%; max-width: 400px; margin: 0 auto 1rem auto; padding: 0.75rem 1rem; border: 2px solid #d1d5db; border-radius: 6px; font-size: 1.2rem; text-align: center; font-family: var(--font-body); transition: all 0.3s; }
@@ -117,6 +119,7 @@
                         <button id="hint-btn">Hint</button>
                         <span id="hint-counter"></span>
                     </div>
+                    <button id="sound-toggle" aria-label="Toggle sound"><i class="fas fa-volume-up"></i></button>
                     <div id="streak-counter"></div>
                 </div>
                 <div class="progress-bar-container">
@@ -150,6 +153,7 @@
                     </div>
                 </div>
                 <button id="play-again-btn" class="btn btn-primary">Play Another Round</button>
+                <button id="practice-mistakes-btn" class="btn btn-secondary hidden">Practice My Mistakes</button>
             </div>
 
             <!-- Achievements -->
@@ -179,18 +183,46 @@
     </main>
 
     <div id="toast" class="toast hidden"></div>
-    <audio id="correct-sound" src="data:audio/mpeg;base64,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"></audio>
-    <audio id="incorrect-sound" src="data:audio/mpeg;base64,UklGRqYAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YaQAAABMAAAAAAAAAP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/w-"></audio>
+    <audio id="correct-sound" src="https://www.fesliyanstudios.com/play-mp3/387"></audio>
+    <audio id="incorrect-sound" src="https://www.fesliyanstudios.com/play-mp3/438"></audio>
     <footer class="footer"></footer>
 
     <script src="script.js"></script> <!-- Your existing script for nav/footer -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const sentences = [
-                // Sentence data... (same as previous implementation)
-                { category: 'subject', sentence: '___ woon in een klein dorp.', answer: ['ik'] }, { category: 'subject', sentence: 'Mijn broer heet David. ___ is 20 jaar oud.', answer: ['hij'] }, { category: 'subject', sentence: 'De zon schijnt. ___ is warm vandaag.', answer: ['het'] }, { category: 'subject', sentence: 'Mijn zus en ik gaan weg. ___ kopen kaartjes.', answer: ['wij', 'we'] }, { category: 'subject', sentence: '(To a friend) Waarom drink ___ geen koffie?', answer: ['jij', 'je'] }, { category: 'subject', sentence: '(To a group) Hebben ___ zin in een pizza?', answer: ['jullie'] }, { category: 'subject', sentence: 'De buren zijn aardig. ___ hebben een hond.', answer: ['zij', 'ze'] }, { category:'subject', sentence: '(Formal) Goedemorgen, heeft ___ een moment tijd?', answer: ['u'] }, { category: 'subject', sentence: 'Vandaag ga ___ vroeg naar huis.', answer: ['ik'] }, { category: 'subject', sentence: 'De kinderen spelen buiten. ___ maken veel lawaai.', answer: ['zij', 'ze'] },
-                { category: 'object', sentence: 'Ik zie de postbode. Ik geef ___ een brief.', answer: ['hem'] }, { category: 'object', sentence: 'Mikaella is mijn vriendin. Ik bel ___ elke dag.', answer: ['haar'] }, { category: 'object', sentence: 'Dit is mijn nieuwe telefoon. Vind je ___ mooi?', answer: ['hem'] }, { category: 'object', sentence: 'Ik begrijp het niet. Kun je ___ helpen?', answer: ['mij', 'me'] }, { category: 'object', sentence: 'Onze leraar is ziek. We sturen ___ een kaart.', answer: ['hem'] }, { category: 'object', sentence: 'Waar is mijn paspoort? Heb jij ___ gezien?', answer: ['het'] }, { category: 'object', sentence: 'De honden hebben dorst. Ik geef ___ water.', answer: ['ze', 'hen'] }, { category: 'object', sentence: 'Kijk naar ___! Ik heb een nieuwe jas.', answer: ['mij', 'me'] }, { category: 'object', sentence: '(Formal) Meneer, kan ik ___ iets vragen?', answer: ['u'] }, { category: 'object', sentence: 'Wij hebben honger. De ober brengt ___ de menukaart.', answer: ['ons'] },
-                { category: 'demonstrative', sentence: '___ boek hier is erg spannend. (het-woord)', answer: ['dit'] }, { category: 'demonstrative', sentence: 'Zie je ___ man daar? (de-woord)', answer: ['die'] }, { category: 'demonstrative', sentence: '___ pen op mijn bureau is van mij. (de-woord)', answer: ['deze'] }, { category: 'demonstrative', sentence: '___ huis in de verte is te koop. (het-woord)', answer: ['dat'] }, { category: 'demonstrative', sentence: 'Ik wil graag ___ twee croissants, alstublieft.', answer: ['deze'] }, { category: 'demonstrative', sentence: 'Wat kost ___ schilderij daar aan de muur?', answer: ['dat'] }, { category: 'demonstrative', sentence: '___ stoelen hier zijn nieuw.', answer: ['deze'] }, { category: 'demonstrative', sentence: 'Vind je ___ jurk in de etalage mooi?', answer: ['die'] }, { category: 'demonstrative', sentence: '___ is een goed idee!', answer: ['dat', 'dit'] }, { category: 'demonstrative', sentence: 'Is ___ jouw glas hier?', answer: ['dit'] },
+                { category: 'subject', sentence: '___ woon in een klein dorp.', answer: ['ik'], explanation: 'Use "ik" for the first person singular.' },
+                { category: 'subject', sentence: 'Mijn broer heet David. ___ is 20 jaar oud.', answer: ['hij'], explanation: 'David is male, so we use "hij".' },
+                { category: 'subject', sentence: 'De zon schijnt. ___ is warm vandaag.', answer: ['het'], explanation: 'Weather and conditions take "het".' },
+                { category: 'subject', sentence: 'Mijn zus en ik gaan weg. ___ kopen kaartjes.', answer: ['wij', 'we'], explanation: 'For "my sister and I" use "wij" or "we".' },
+                { category: 'subject', sentence: '(To a friend) Waarom drink ___ geen koffie?', answer: ['jij', 'je'], explanation: 'Informal singular "you" is "jij/je".' },
+                { category: 'subject', sentence: '(To a group) Hebben ___ zin in een pizza?', answer: ['jullie'], explanation: 'Addressing a group uses "jullie".' },
+                { category: 'subject', sentence: 'De buren zijn aardig. ___ hebben een hond.', answer: ['zij', 'ze'], explanation: 'Plural nouns take "zij/ze".' },
+                { category: 'subject', sentence: '(Formal) Goedemorgen, heeft ___ een moment tijd?', answer: ['u'], explanation: 'Formal "you" is "u".' },
+                { category: 'subject', sentence: 'Vandaag ga ___ vroeg naar huis.', answer: ['ik'], explanation: 'Talking about yourself again uses "ik".' },
+                { category: 'subject', sentence: 'De kinderen spelen buiten. ___ maken veel lawaai.', answer: ['zij', 'ze'], explanation: '"De kinderen" is plural, so "zij/ze".' },
+
+                { category: 'object', sentence: 'Ik zie de postbode. Ik geef ___ een brief.', answer: ['hem'], explanation: 'Use "hem" for a male person.' },
+                { category: 'object', sentence: 'Mikaella is mijn vriendin. Ik bel ___ elke dag.', answer: ['haar'], explanation: 'Female person -> "haar".' },
+                { category: 'object', sentence: 'Dit is mijn nieuwe telefoon. Vind je ___ mooi?', answer: ['hem'], explanation: '"Telefoon" is a de-word, so object pronoun is "hem".' },
+                { category: 'object', sentence: 'Ik begrijp het niet. Kun je ___ helpen?', answer: ['mij', 'me'], explanation: 'First person object is "mij/me".' },
+                { category: 'object', sentence: 'Onze leraar is ziek. We sturen ___ een kaart.', answer: ['hem'], explanation: 'Male teacher -> "hem".' },
+                { category: 'object', sentence: 'Waar is mijn paspoort? Heb jij ___ gezien?', answer: ['het'], explanation: 'Het-word object stays "het".' },
+                { category: 'object', sentence: 'De honden hebben dorst. Ik geef ___ water.', answer: ['ze', 'hen'], explanation: 'Plural animals/people use "ze/hen".' },
+                { category: 'object', sentence: 'Kijk naar ___! Ik heb een nieuwe jas.', answer: ['mij', 'me'], explanation: 'Pointing to yourself uses "mij/me".' },
+                { category: 'object', sentence: '(Formal) Meneer, kan ik ___ iets vragen?', answer: ['u'], explanation: 'Formal object pronoun is "u".' },
+                { category: 'object', sentence: 'Wij hebben honger. De ober brengt ___ de menukaart.', answer: ['ons'], explanation: 'First person plural object is "ons".' },
+
+                { category: 'demonstrative', sentence: '___ boek hier is erg spannend. (het-woord)', answer: ['dit'], explanation: 'Het-word nearby -> "dit".' },
+                { category: 'demonstrative', sentence: 'Zie je ___ man daar? (de-woord)', answer: ['die'], explanation: 'De-word far away -> "die".' },
+                { category: 'demonstrative', sentence: '___ pen op mijn bureau is van mij. (de-woord)', answer: ['deze'], explanation: 'De-word nearby -> "deze".' },
+                { category: 'demonstrative', sentence: '___ huis in de verte is te koop. (het-woord)', answer: ['dat'], explanation: 'Het-word far away -> "dat".' },
+                { category: 'demonstrative', sentence: 'Ik wil graag ___ twee croissants, alstublieft.', answer: ['deze'], explanation: 'Ordering items near you uses "deze".' },
+                { category: 'demonstrative', sentence: 'Wat kost ___ schilderij daar aan de muur?', answer: ['dat'], explanation: 'Something far away -> "dat".' },
+                { category: 'demonstrative', sentence: '___ stoelen hier zijn nieuw.', answer: ['deze'], explanation: 'Plural near objects -> "deze".' },
+                { category: 'demonstrative', sentence: 'Vind je ___ jurk in de etalage mooi?', answer: ['die'], explanation: 'De-word far away -> "die".' },
+                { category: 'demonstrative', sentence: '___ is een goed idee!', answer: ['dat', 'dit'], explanation: 'Referring to an idea uses "dat" or "dit".' },
+                { category: 'demonstrative', sentence: 'Is ___ jouw glas hier?', answer: ['dit'], explanation: 'Het-word close by -> "dit".' },
             ];
 
             // --- DOM Elements ---
@@ -211,10 +243,14 @@
             const finalStreakEl = document.getElementById('final-streak');
             const highScoreEl = document.getElementById('high-score');
             const playAgainBtn = document.getElementById('play-again-btn');
+            const practiceMistakesBtn = document.getElementById('practice-mistakes-btn');
             const mixedBtn = document.getElementById('mixed-btn');
             const toast = document.getElementById('toast');
             const correctSound = document.getElementById('correct-sound');
             const incorrectSound = document.getElementById('incorrect-sound');
+            const soundToggle = document.getElementById('sound-toggle');
+
+            let soundEnabled = true;
 
             // --- Game State & Constants ---
             let currentSentences = [];
@@ -223,6 +259,8 @@
             let score = 0;
             let currentStreak = 0;
             let bestStreakInRound = 0;
+            let wrongQuestions = [];
+            let totalQuestions = 10;
             let hintTokens = 3;
             let achievements = {};
             let highScores = {};
@@ -230,19 +268,21 @@
             const UNLOCK_SCORE = 8;
 
             // --- Core Game Logic ---
-            function startGame(category) {
+            function startGame(category, customList) {
                 currentCategory = category;
-                let filteredSentences = sentences;
-                if (category !== 'mixed') {
+                let filteredSentences = customList || sentences;
+                if (!customList && category !== 'mixed') {
                     filteredSentences = sentences.filter(s => s.category === category);
                 }
-                currentSentences = shuffleArray(filteredSentences).slice(0, QUESTIONS_PER_ROUND);
+                currentSentences = customList ? shuffleArray(filteredSentences) : shuffleArray(filteredSentences).slice(0, QUESTIONS_PER_ROUND);
+                totalQuestions = currentSentences.length;
 
                 currentQuestionIndex = 0;
                 score = 0;
                 currentStreak = 0;
                 bestStreakInRound = 0;
                 hintTokens = 3;
+                wrongQuestions = [];
 
                 updateStreakDisplay();
                 updateHintDisplay();
@@ -274,17 +314,23 @@
                     feedbackMessage.textContent = 'Correct! 🎉';
                     feedbackMessage.className = 'correct';
                     answerInput.classList.add('correct-answer');
-                    correctSound.play();
+                    if (soundEnabled) correctSound.play();
                     triggerConfetti();
                     score++;
                     currentStreak++;
                     if(currentStreak > bestStreakInRound) bestStreakInRound = currentStreak;
                     checkAndAwardAchievement('onfire', currentStreak >= 5);
                 } else {
-                    feedbackMessage.textContent = `Not quite. Correct was: ${correctAnswerArray.join(' / ')}`;
+                    const explanation = currentSentences[currentQuestionIndex].explanation || '';
+                    let message = `Not quite. Correct was: ${correctAnswerArray.join(' / ')}`;
+                    if (explanation) {
+                        message += `. Tip: ${explanation}`;
+                    }
+                    feedbackMessage.textContent = message;
                     feedbackMessage.className = 'incorrect';
                     answerInput.classList.add('incorrect-answer');
-                    incorrectSound.play();
+                    if (soundEnabled) incorrectSound.play();
+                    wrongQuestions.push(currentSentences[currentQuestionIndex]);
                     currentStreak = 0;
                 }
                 updateStreakDisplay();
@@ -304,7 +350,7 @@
 
             function nextQuestion() {
                 currentQuestionIndex++;
-                if (currentQuestionIndex < QUESTIONS_PER_ROUND) {
+                if (currentQuestionIndex < totalQuestions) {
                     displayQuestion();
                 } else {
                     showCompletion();
@@ -314,24 +360,31 @@
             function showCompletion() {
                 // Update stats and save progress
                 const oldHighScore = highScores[currentCategory] || 0;
-                if (score > oldHighScore) {
+                if (currentCategory !== 'mistakes' && score > oldHighScore) {
                     highScores[currentCategory] = score;
                 }
                 saveProgress();
 
                 // Check for achievements
                 checkAndAwardAchievement('beginner', true);
-                checkAndAwardAchievement('specialist', score === QUESTIONS_PER_ROUND);
-                checkAndAwardAchievement('pro', currentCategory === 'mixed');
+                if (currentCategory !== 'mistakes') {
+                    checkAndAwardAchievement('specialist', score === QUESTIONS_PER_ROUND);
+                    checkAndAwardAchievement('pro', currentCategory === 'mixed');
+                }
                 
                 // Display final stats
-                finalScoreEl.textContent = `${score} / ${QUESTIONS_PER_ROUND}`;
+                finalScoreEl.textContent = `${score} / ${totalQuestions}`;
                 finalStreakEl.textContent = bestStreakInRound;
-                highScoreEl.textContent = `${highScores[currentCategory]} / ${QUESTIONS_PER_ROUND}`;
+                if (currentCategory === 'mistakes') {
+                    highScoreEl.textContent = '-';
+                } else {
+                    highScoreEl.textContent = `${highScores[currentCategory] || 0} / ${QUESTIONS_PER_ROUND}`;
+                }
                 if (score > oldHighScore && score > 0) {
                     highScoreEl.innerHTML += ` <span class="new-high-score">New Best!</span>`;
                 }
 
+                practiceMistakesBtn.classList.toggle('hidden', wrongQuestions.length === 0);
                 practiceArea.classList.add('hidden');
                 completionScreen.classList.remove('hidden');
                 updateUIFromState();
@@ -351,9 +404,9 @@
             }
 
             function updateProgressBar() {
-                const progress = ((currentQuestionIndex) / QUESTIONS_PER_ROUND) * 100;
+                const progress = ((currentQuestionIndex) / totalQuestions) * 100;
                 progressBar.style.width = `${progress}%`;
-                progressText.textContent = `Question ${currentQuestionIndex + 1} of ${QUESTIONS_PER_ROUND}`;
+                progressText.textContent = `Question ${currentQuestionIndex + 1} of ${totalQuestions}`;
             }
 
             function updateStreakDisplay() {
@@ -389,7 +442,7 @@
 
             // --- LocalStorage & Progress ---
             function saveProgress() {
-                const progress = { highScores, achievements };
+                const progress = { highScores, achievements, sound: soundEnabled };
                 localStorage.setItem('safeHavenPronounGame', JSON.stringify(progress));
             }
 
@@ -398,6 +451,7 @@
                 if (savedProgress) {
                     highScores = savedProgress.highScores || {};
                     achievements = savedProgress.achievements || {};
+                    soundEnabled = savedProgress.sound !== false;
                 }
             }
 
@@ -448,9 +502,21 @@
             }
             
             // --- Initial Setup & Event Listeners ---
+            function updateSoundIcon() {
+                const icon = soundToggle.querySelector('i');
+                if (soundEnabled) {
+                    icon.classList.remove('fa-volume-mute');
+                    icon.classList.add('fa-volume-up');
+                } else {
+                    icon.classList.remove('fa-volume-up');
+                    icon.classList.add('fa-volume-mute');
+                }
+            }
+
             function initialize() {
                 loadProgress();
                 updateUIFromState();
+                updateSoundIcon();
             }
 
             categorySelection.addEventListener('click', (e) => {
@@ -462,6 +528,16 @@
             checkBtn.addEventListener('click', checkAnswer);
             nextBtn.addEventListener('click', nextQuestion);
             hintBtn.addEventListener('click', useHint);
+            soundToggle.addEventListener('click', () => {
+                soundEnabled = !soundEnabled;
+                updateSoundIcon();
+                saveProgress();
+            });
+            practiceMistakesBtn.addEventListener('click', () => {
+                completionScreen.classList.add('hidden');
+                startGame('mistakes', wrongQuestions);
+                wrongQuestions = [];
+            });
             playAgainBtn.addEventListener('click', () => {
                 completionScreen.classList.add('hidden');
                 categorySelection.classList.remove('hidden');
