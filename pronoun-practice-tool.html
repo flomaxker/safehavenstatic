@@ -291,9 +291,8 @@
                 { category: 'subject', sentence: 'Dit huis is groot. ___ heeft vier slaapkamers.', answer: ['het'], explanation: '"Huis" is het-word -> "het".' },
                 { category: 'subject', sentence: 'Mijn vrienden en ik gaan kamperen. ___ nemen tenten mee.', answer: ['wij', 'we'], explanation: '"Vrienden en ik" -> "wij/we".' },
                 { category: 'subject', sentence: 'De auto start niet. ___ heeft geen benzine.', answer: ['hij'], explanation: '"Auto" is de-word -> "hij".' },
-                { category: 'subject', sentence: 'Kinderen, ___ willen jullie wat drinken?', answer: ['jullie'], explanation: 'Addressing children -> "jullie".' },
+                { category: 'subject', sentence: 'Kinderen, willen ___ wat drinken?', answer: ['jullie'], explanation: 'Addressing children -> "jullie".' },
                 { category: 'subject', sentence: 'Het weer verandert. ___ wordt kouder.', answer: ['het'], explanation: 'Weather/conditions use "het".' },
-
                 { category: 'object', sentence: 'Ik zie de postbode. Ik geef ___ een brief.', answer: ['hem'], explanation: 'Use "hem" for a male person.' },
                 { category: 'object', sentence: 'Mijn vriendin is jarig. Ik bel ___ meteen.', answer: ['haar'], explanation: 'Female person -> "haar".' },
                 { category: 'object', sentence: 'Dit is mijn nieuwe telefoon. Vind je ___ mooi?', answer: ['hem'], explanation: '"Telefoon" is a de-word, so object pronoun is "hem".' },
@@ -431,10 +430,6 @@
             const TIME_PER_QUESTION = 20;
             let timeLeft = TIME_PER_QUESTION;
             let timerInterval;
-
-            function capitalize(str) {
-                return str.charAt(0).toUpperCase() + str.slice(1);
-            }
 
             // --- Core Game Logic ---
             function startGame(category, customList) {
