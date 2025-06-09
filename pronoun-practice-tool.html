@@ -128,16 +128,16 @@
                 <p class="intro-text">Master Dutch pronouns in a fun way! Choose a category, track your high scores, and unlock achievements. Veel succes!</p>
             </div>
             <div id="game-field" class="game-field">
-            <div id='start-screen'>
+            <div id="start-screen">
                 <h2><span class="emoji">🎮</span> Ready to Play?</h2>
                 <p>Welcome! Press Start to choose a category. You'll answer 10 questions per round. Type the missing word and hit Enter. Use hints if you're stuck — they reset your streak. Score 8/10 in each category to unlock Challenge Mode. Your progress saves automatically and you can toggle sounds with the speaker icon.</p>
-                <button id='start-btn' class='btn btn-primary'>Start</button>
+                <button id="start-btn" class="btn btn-primary">Start</button>
             </div>
             <!-- Category Selection -->
             <div id="category-selection" class="hidden">
                 <button class="btn btn-primary" data-category="subject">Subject Pronouns</button>
                 <button class="btn btn-primary" data-category="object">Object Pronouns</button>
-                <button class="btn btn-secondary" data-category="demonstrative">Demonstratives</button>
+                <button class="btn btn-primary" data-category="demonstrative">Demonstratives</button>
                 <button id="mixed-btn" class="btn btn-secondary" data-category="mixed" disabled>Challenge Mode</button>
             </div>
 
@@ -603,8 +603,21 @@
                 const savedProgress = JSON.parse(localStorage.getItem('safeHavenPronounGame'));
                 if (savedProgress) {
                     highScores = savedProgress.highScores || {};
+                    // Convert stored values to numbers for reliability
+                    for (const key in highScores) {
+                        highScores[key] = Number(highScores[key]) || 0;
+                    }
+                    let migrated = false;
+                    if (highScores.demonstratives !== undefined) {
+                        if (highScores.demonstrative === undefined || highScores.demonstrative < highScores.demonstratives) {
+                            highScores.demonstrative = highScores.demonstratives;
+                        }
+                        delete highScores.demonstratives;
+                        migrated = true;
+                    }
                     achievements = savedProgress.achievements || {};
                     soundEnabled = savedProgress.sound !== false;
+                    if (migrated) saveProgress();
                 }
             }
 
@@ -637,9 +650,12 @@
                 updateAchievementsUI();
 
                 // Update Challenge Mode button state
-                const allUnlocked = (highScores.subject >= UNLOCK_SCORE) && 
-                                    (highScores.object >= UNLOCK_SCORE) && 
-                                    (highScores.demonstrative >= UNLOCK_SCORE);
+                const demoScore = (highScores.demonstrative !== undefined)
+                                    ? highScores.demonstrative
+                                    : (highScores.demonstratives || 0);
+                const allUnlocked = (Number(highScores.subject || 0) >= UNLOCK_SCORE) &&
+                                    (Number(highScores.object || 0) >= UNLOCK_SCORE) &&
+                                    (Number(demoScore) >= UNLOCK_SCORE);
                 
                 if (allUnlocked) {
                     mixedBtn.disabled = false;
