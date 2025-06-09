@@ -4,80 +4,105 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dutch Pronoun Game | Safe Haven Dutch Coaching</title>
-    <meta name="description" content="A fun, gamified tool to master Dutch pronouns with a friendly guide. Get smart feedback, earn badges, and practice your mistakes.">
+    <meta name="description" content="A fun, gamified tool to master Dutch pronouns. Earn badges, track high scores, and unlock challenges.">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Poppins:wght@500;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+          integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <link rel="stylesheet" href="style.css">
     
+    <!-- Confetti Library -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
 
+    <!-- Custom styles for the interactive game -->
     <style>
         .tool-intro { text-align: center; margin-bottom: 2.5rem; }
         #category-selection { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-bottom: 3rem; }
         #category-selection .btn { min-width: 180px; }
         #practice-area { background-color: var(--color-bg); padding: 1.5rem 2.5rem 2rem; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07); border-left: 5px solid var(--color-primary); }
         .game-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; height: 30px; }
-        #game-controls { display: flex; align-items: center; gap: 1rem; }
-        #mute-btn { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--color-text-light); }
         #hint-container { font-size: 1rem; color: var(--color-text-light); }
         #hint-btn { background: none; border: 1px solid var(--color-text-light); color: var(--color-text-light); padding: 0.2rem 0.6rem; border-radius: 4px; cursor: pointer; transition: all 0.2s ease; }
         #hint-btn:hover:not(:disabled) { background-color: var(--color-primary); color: var(--color-white); border-color: var(--color-primary); }
         #hint-btn:disabled { opacity: 0.5; cursor: not-allowed; }
         #streak-counter { font-size: 1.5rem; color: var(--color-primary); font-weight: 700; }
-        #timer-display { font-size: 1.2rem; color: var(--color-text-light); }
-        #sentence-container { font-size: 1.5rem; color: var(--color-heading); margin: 1.5rem 0; line-height: 1.6; text-align: center; min-height: 70px; }
+        #sentence-container { font-size: 1.5rem; color: var(--color-heading); margin-bottom: 1.5rem; line-height: 1.6; text-align: center; min-height: 70px; }
         #answer-input { display: block; width: 100%; max-width: 400px; margin: 0 auto 1rem auto; padding: 0.75rem 1rem; border: 2px solid #d1d5db; border-radius: 6px; font-size: 1.2rem; text-align: center; font-family: var(--font-body); transition: all 0.3s; }
         #answer-input:focus { outline: none; border-color: var(--color-primary); }
         #answer-input.correct-answer { border-color: var(--color-secondary); background-color: #f0fdfa; }
         #answer-input.incorrect-answer { border-color: var(--color-accent); background-color: #fff1f2; }
         .action-buttons { display: flex; justify-content: center; gap: 1rem; margin-top: 1.5rem; }
-        
-        /* Mascot & Feedback */
-        .mascot-feedback-container { display: flex; justify-content: center; align-items: center; gap: 1.5rem; margin-top: 1.5rem; min-height: 60px; }
-        #uilbert-mascot { width: 70px; height: 70px; transition: transform 0.3s ease; }
-        #uilbert-mascot .eye { transition: all 0.2s; }
-        #uilbert-mascot .mouth { transition: all 0.2s; }
-        #uilbert-mascot.happy .mouth { d: path('M 20 50 Q 35 65 50 50'); }
-        #uilbert-mascot.thinking .eye { transform: translateY(5px); }
-        #uilbert-mascot.thinking .mouth { d: path('M 25 55 L 45 55'); }
-        #feedback-bubble { background: white; border-radius: 8px; padding: 0.75rem 1.25rem; position: relative; max-width: 400px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        #feedback-bubble::before { content: ''; position: absolute; top: 50%; left: -10px; transform: translateY(-50%); border-width: 10px; border-style: solid; border-color: transparent white transparent transparent; }
-        #feedback-message { font-weight: 600; margin: 0; }
-        #smart-tip { font-size: 0.9rem; color: var(--color-text-light); margin-top: 0.5rem; font-style: italic; }
+        #feedback-message { min-height: 1.5em; margin-top: 1.5rem; text-align: center; font-weight: 600; }
         #feedback-message.correct { color: var(--color-secondary); }
         #feedback-message.incorrect { color: var(--color-accent); }
-
-        /* Completion Screen */
         #completion-screen { text-align: center; padding: 3rem 1.5rem; background-color: #eff6ff; border: 1px solid #dbeafe; border-radius: 8px; }
         #completion-stats { display: flex; justify-content: center; gap: 2rem; margin: 1rem 0 2rem 0; text-align: center; flex-wrap: wrap; }
         .stat-item h4 { color: var(--color-text-light); margin-bottom: 0.25rem; font-size: 1rem; font-weight: 500; }
         .stat-item p { color: var(--color-primary); font-size: 1.8rem; font-weight: 700; margin: 0; }
         .new-high-score { color: var(--color-accent); font-weight: 700; }
-        .completion-buttons { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
-        
-        .hidden { display: none !important; }
+        .hidden { display: none; }
+
+        /* Achievements */
+        #achievements-container { margin: 3rem auto; max-width: 600px; text-align: center; }
+        #achievements-container h3 { color: var(--color-secondary); }
+        .badge-grid { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; margin-top: 1.5rem; }
+        .badge { width: 100px; text-align: center; }
+        .badge .icon { font-size: 3rem; border-radius: 50%; width: 70px; height: 70px; line-height: 70px; margin: 0 auto; transition: all 0.4s ease; }
+        .badge .title { font-size: 0.8rem; font-weight: 600; margin-top: 0.5rem; }
+        .badge.locked .icon { background-color: #e5e7eb; color: #9ca3af; }
+        .badge.locked .title { color: #9ca3af; }
+        .badge.unlocked .icon { background-color: var(--color-secondary); color: var(--color-white); transform: scale(1.1); box-shadow: 0 4px 10px rgba(20, 184, 166, 0.4); }
+        .badge.unlocked .title { color: var(--color-heading); }
+
+        /* Tooltip for locked button */
         [data-tooltip] { position: relative; }
-        [data-tooltip]:hover::after { content: attr(data-tooltip); position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background-color: #374151; color: white; padding: 0.5rem 1rem; border-radius: 4px; font-size: 0.85rem; white-space: nowrap; z-index: 10; margin-bottom: 5px; }
+        [data-tooltip]:hover::after { content: attr(data-tooltip); position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background-color: #374151; color: white; padding: 0.5rem 1rem; border-radius: 4px; font-size: 0.85rem; white-space: nowrap; z-index: 10; margin-bottom: 5px; opacity: 1; transition: opacity 0.2s; }
+
+        /* Toast Notification */
         .toast { position: fixed; top: 20px; right: 20px; background-color: var(--color-secondary); color: white; padding: 1rem 1.5rem; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); z-index: 2000; transform: translateX(120%); transition: transform 0.5s ease-in-out; }
         .toast.show { transform: translateX(0); }
         .toast .emoji { margin-right: 0.75rem; font-size: 1.2rem; }
+
+        @media (max-width: 768px) {
+            #practice-area { padding: 1.5rem; }
+            #sentence-container { font-size: 1.2rem; }
+            #answer-input { font-size: 1.1rem; }
+        }
     </style>
 </head>
 <body id="page-pronoun-game">
-    <header class="header"><!-- Header content loaded by script.js --></header>
+    <header class="header">
+        <nav class="navbar container">
+             <a href="index.html" class="logo-link">
+                 <img src="Safe Haven Banner (groot)-2.png" alt="Safe Haven Dutch Coaching Banner" class="logo-banner">
+            </a>
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="index.html#home" class="nav-link">Home</a></li>
+                <li><a href="index.html#about" class="nav-link">About Me</a></li>
+                <li><a href="index.html#approach" class="nav-link">Approach</a></li>
+                <li><a href="blog.html" class="nav-link">Blog</a></li>
+                <li><a href="feelings-flags.html" class="nav-link">Feelings</a></li>
+                <li><a href="integration-checklist.html" class="nav-link">Checklist</a></li>
+                <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+            </ul>
+            <button class="nav-toggle" id="nav-toggle" aria-label="Menu"><i class="fas fa-bars"></i></button>
+        </nav>
+    </header>
 
     <main class="blog-post-container">
         <div class="container tool-content">
+
             <div class="tool-intro">
                 <h1><span class="emoji">🏆</span> The Great Pronoun Game</h1>
-                <p class="intro-text">Master Dutch pronouns with Uilbert the Owl! Get smart feedback, earn badges, and practice your mistakes. Veel succes!</p>
+                <p class="intro-text">Master Dutch pronouns in a fun way! Choose a category, track your high scores, and unlock achievements. Veel succes!</p>
             </div>
 
+            <!-- Category Selection -->
             <div id="category-selection">
                 <button class="btn btn-primary" data-category="subject">Subject Pronouns</button>
                 <button class="btn btn-primary" data-category="object">Object Pronouns</button>
@@ -85,18 +110,14 @@
                 <button id="mixed-btn" class="btn btn-secondary" data-category="mixed" disabled>Challenge Mode</button>
             </div>
 
+            <!-- The Practice Area -->
             <div id="practice-area" class="hidden">
                 <div class="game-header">
-                    <div id="game-controls">
-                        <button id="mute-btn" title="Mute/Unmute Sounds"><i class="fas fa-volume-high"></i></button>
-                        <button id="timer-mode-btn" title="Toggle Timed Mode"><i class="fas fa-stopwatch"></i></button>
-                        <div id="hint-container">
-                            <button id="hint-btn">Hint</button>
-                            <span id="hint-counter"></span>
-                        </div>
+                    <div id="hint-container">
+                        <button id="hint-btn">Hint</button>
+                        <span id="hint-counter"></span>
                     </div>
                     <div id="streak-counter"></div>
-                    <div id="timer-display" class="hidden"></div>
                 </div>
                 <div class="progress-bar-container">
                     <div id="progress-bar" class="progress-bar"></div>
@@ -104,225 +125,186 @@
                 </div>
                 <div id="sentence-container"></div>
                 <input type="text" id="answer-input" placeholder="Type your answer" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-                <div class="mascot-feedback-container">
-                    <svg id="uilbert-mascot" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg">
-                        <g>
-                            <path d="M35,2.5 C17.05,2.5 2.5,17.05 2.5,35 S17.05,67.5 35,67.5 S67.5,52.95 67.5,35 S52.95,2.5 35,2.5 Z" fill="#a87b3e" stroke="#6b4c27" stroke-width="3"/>
-                            <path d="M35,15 C22.85,15 13,24.85 13,37 C13,44.2 17.5,50.5 24,54 L35,45 L46,54 C52.5,50.5 57,44.2 57,37 C57,24.85 47.15,15 35,15 Z" fill="#d4ad7a"/>
-                            <circle class="eye" cx="25" cy="35" r="10" fill="white" stroke="black" stroke-width="1.5"/>
-                            <circle cx="25" cy="35" r="4" fill="black"/>
-                            <circle class="eye" cx="45" cy="35" r="10" fill="white" stroke="black" stroke-width="1.5"/>
-                            <circle cx="45" cy="35" r="4" fill="black"/>
-                            <path class="mouth" d="M 30 50 L 40 50" stroke="black" stroke-width="2" stroke-linecap="round" fill="none"/>
-                        </g>
-                    </svg>
-                    <div id="feedback-bubble" class="hidden">
-                        <p id="feedback-message"></p>
-                        <p id="smart-tip" class="hidden"></p>
-                    </div>
-                </div>
+                <div id="feedback-message"></div>
                 <div class="action-buttons">
                     <button id="check-btn" class="btn btn-primary">Check Answer</button>
                     <button id="next-btn" class="btn btn-secondary hidden">Next Question</button>
                 </div>
             </div>
 
+            <!-- Completion Screen -->
             <div id="completion-screen" class="hidden">
                 <h2><span class="emoji">🎉</span> Round Complete!</h2>
                 <div id="completion-stats">
-                    <div class="stat-item"><h4>Score</h4><p id="final-score"></p></div>
-                    <div class="stat-item"><h4>Best Streak</h4><p id="final-streak"></p></div>
-                    <div class="stat-item"><h4>High Score</h4><p id="high-score"></p></div>
+                    <div class="stat-item">
+                        <h4>Score</h4>
+                        <p id="final-score">0 / 10</p>
+                    </div>
+                    <div class="stat-item">
+                        <h4>Best Streak</h4>
+                        <p id="final-streak">0</p>
+                    </div>
+                    <div class="stat-item">
+                        <h4>High Score</h4>
+                        <p id="high-score">0 / 10</p>
+                    </div>
                 </div>
-                <div class="completion-buttons">
-                    <button id="practice-mistakes-btn" class="btn btn-secondary hidden">Practice My Mistakes</button>
-                    <button id="play-again-btn" class="btn btn-primary">Play Another Round</button>
+                <button id="play-again-btn" class="btn btn-primary">Play Another Round</button>
+            </div>
+
+            <!-- Achievements -->
+            <div id="achievements-container">
+                <h3><i class="fas fa-medal"></i> Your Achievements</h3>
+                <div class="badge-grid">
+                    <div id="badge-beginner" class="badge locked" data-tooltip="Complete your first round">
+                        <div class="icon"><i class="fas fa-seedling"></i></div>
+                        <p class="title">Beginner</p>
+                    </div>
+                    <div id="badge-specialist" class="badge locked" data-tooltip="Get a perfect 10/10 score">
+                        <div class="icon"><i class="fas fa-star"></i></div>
+                        <p class="title">Specialist</p>
+                    </div>
+                    <div id="badge-onfire" class="badge locked" data-tooltip="Achieve a 5-answer streak">
+                        <div class="icon"><i class="fas fa-fire"></i></div>
+                        <p class="title">On Fire!</p>
+                    </div>
+                    <div id="badge-pro" class="badge locked" data-tooltip="Unlock and complete the Challenge Mode">
+                        <div class="icon"><i class="fas fa-crown"></i></div>
+                        <p class="title">Pronoun Pro</p>
+                    </div>
                 </div>
             </div>
             
-            <div id="achievements-container" class="hidden"><!-- Achievements loaded by JS --></div>
         </div>
     </main>
 
     <div id="toast" class="toast hidden"></div>
-    <audio id="correct-sound" crossorigin="anonymous" preload="auto" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
-    <audio id="incorrect-sound" crossorigin="anonymous" preload="auto" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
+    <audio id="correct-sound" src="data:audio/mpeg;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YV9vT19IAFAAZAB0AH4AigDVAJMAmwC8ANsA7AEJAjsF5QPgAtgC0QKyARkCqgK8AfcB+QIZBBMEcQYBB9sI1QpWC/8N/w+BEF0S8hReF8QZ/huOIwAnJyqALgA0QTfAOEE9wUJBP8FsQnVDtIS+hX9Gfob/iUdJ2QqsC6YNHg39D0AR4xMhFHwV+xjaG4gf8iQGKcUtRjGPN5BOUU9SrVMK1A/YFdwa3h4eH/8jAClqLuMxBDhEPLQ+mkBQQ2ZF4UfpSCdK2gxODf8QwhPeFCAVzhbLGcgb9R8UIUEp2jE/NkE9g0F/QyZFoEg6Sm9L0AxJDeoQexPeFRUXeRjCG2YfNiOVKmgwQDZOPWdC5UcuStpN81GkVKdXfWEeYpZod21EcV9yZ3pYfs6AGYcYiFaN2pA2lXiY6ZyAncCipqfMrM2x/7mFv8TBxMb4y4LP5NDe1snb6uXy6/X5/v8AAQECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8gISIjJCUmJygpKissLS4vMDEyMzQ1Njc4OTo7PD0+P0BBQkNERUZHSElKS0xNTk9QUVJTVFVWV1hZWltcXV5fYGFiY2RlZmdoaWprbG1ub3BxcnN0dXZ3eHl6e3x9fn+AgYKDhIWGh4iJiouMjY6PkJGSk5SVlpeYmZqbnJ2en6ChoqOkpaanqKmqq6ytrq+wsbKztLW2t7i5uru8vb6/wMHCw8TFxsfIycrLzM3Oz9DR0tPU1dbX2Nna29zd3t/g4eLj5OXm5+jp6uvs7e7v8PHy8/T19vf4+fr7/P3+/wABAgMEBQYHCAkKCwwNDg8QERITFBUWFxgZGhscHR4fICEiIyQlJicoKSorLC0uLzAxMjM0NTY3ODk6Ozw9Pj9AQUJDREVGR0hJSktMTU5PUFFSU1RVVldYWVpbXF1eX2BhYmNkZWZnaGlqa2xtbm9wcXJzdHV2d3h5ent8fX5/gIGCg4SFhoeIiYqLjI2Oj5CRkpOUlZaXmJmam5ydnp+goaKjpKWmp6ipqqusra6vsLGys7S1tre4ubq7vL2+v8DBwsPExcbHyMnKy8zNzs/Q0dLT1NXW19jZ2tvc3d7f4OHi4+Tl5ufo6err7O3u7/Dx8vP09fb3+Pn6+/z9/v8AAQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyAhIiMkJSYnKCkqKywtLi8wMTIzNDU2Nzg5Ojs8PT4/QEFCQ0RFRkdISUpLTE1OT1BRUlNUVVZXWFlaW1xdXl9gYWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXp7fH1+f4CBgoOEhYaHiImKi4yNjo+QkZKTlJWWl5iZmpucnZ6foKGio6SlpqeoqaqrrK2ur7CxsrO0tba3uLm6u7y9vr/AwcLDxMXGx8jJysvMzc7P0NHS09TV1tfY2drb3N3e3+Dh4uPk5ebn6Onq6+zt7u/w8fLz9PX29/j5+vv8/f7/AAAAAQACAwAEBQUHCAgJCgsMDQ0ODw8QERITFBUWFxgZGhscHR4fICEiIyQlJicoKSorLC0uLzAxMjM0NTY3ODk6Ozw9Pj9AQUJDREVGR0hJSktMTU5PUFFSU1VXVldYWVpbXF1eX2BhYmNkZWZnaGlqa2xtbm9wcXJzdHV2d3h5ent8fX5/gIGCg4SFhoeIiYqLjI2Oj5CRkpOUlZaXmJmam5ydnp+goaKjpKWmp6ipqqusra6vsLGys7S1tre4ubq7vL2+v8DBwsPExcbHyMnKy8zNzs/Q0dLT1NXW19jZ2tvc3d7f4OHi4+Tl5ufo6err7O3u7/Dx8vP09fb3+Pn6+/z9/v8AAQECBAMDBQYGBwgICQoLDAwNDg8PEBESExQVFhcYGRobHB0eHyAhIiMkJSYnKCkqKywtLi8wMTIzNDU2Nzg5Ojs8PT4/QEFCQ0RFRkdISUpLTE1OT1BRUlNUVVZXWFlaW1xdXl9gYWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXp7fH1+f4CBgoOEhYaHiImKi4yNjo+QkZKTlJWWl5iZmpucnZ6foKGio6SlpqeoqaqrrK2ur7CxsrO0tba3uLm6u7y9vr/AwcLDxMXGx8jJysvMzc7P0NHS09TV1tfY2drb3N3e3+Dh4uPk5ebn6Onq6+zt7u/w8fLz9PX29/j5+vv8/f7/AAEBAgIDBAUGBggICQoLCwwNDg4PEBEUFBUWFxgZGhscHR8gISIjJCUmJygpKissLS8wMTIzNDU2Nzg5Ojw9Pj9BQUJDREVGSElKS0xNTk9QUlJTVFVWV1hZWltcXV9gYWJjZGVmaGlqa2xtbm9wcXJ0dXZ3eHl6e3x9fn+BgYKDhIWGh4iJiouMjY+QkZKTlJWWl5iZmpydnp+goaKjpKWmp6ipqqusra+wsbKztLW2uLm6u7y9vr/AwcLDxMXGx8jJysvMzc/Q0dLT1NXW19na29zd3t/g4eLj5OXm6Onq6+zt7u/w8fLz9PX29/n6+/z9/gAAAQACAQMDBQYGBwgICQoLDAwNDg4PEBESExQVFhcYGRobHB0eHyAhIiMkJSYnKCkqKywtLi8wMTIzNDU2Nzg5Ojs8PT4/QEFCQ0RFRkdISUpLTE1OT1BRUlNUVVZXWFlaW1xdXl9gYWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXp7fH1+f4CBgoOEhYaHiImKi4yNjo+QkZKTlJWWl5iZmpucnZ6foKGio6SlpqeoqaqrrK2ur7CxsrO0tba3uLm6u7y9vr/AwcLDxMXGx8jJysvMzc7P0NHS09TV1tfY2drb3N3e3+Dh4uPk5ebn6Onq6+zt7u/w8fLz9PX29/j5+vv8/f7/AAEBAgIDBAUGBwcICQoLCwwNDg4PEBESExQVFhcYGRobHB0eHyAhIiMkJSYnKCkqKywtLi8wMTIzNDU2Nzg5Ojs8PT4/QEFCQ0RFRkdISUpLTE1OT1BRUlNUVVZXWFlaW1xdXl9gYWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXp7fH1+f4CBgoOEhYaHiImKi4yNjo+QkZKTlJWWl5iZmpucnZ6foKGio6SlpqeoqaqrrK2ur7CxsrO0tba3uLm6u7y9vr/AwcLDxMXGx8jJysvMzc7P0NHS09TV1tfY2drb3N3e3+Dh4uPk5ebn6Onq6+zt7u/w8fLz9PX29/j5+vv8/f7/AAEBAgIDBAUGBwcICQoLCwwNDg4PEBESExQVFhcYGRobHB0eHyAhIiMkJSYnKCkqKywtLi8wMTIzNDU2Nzg5Ojs8PT4/QEFCQ0RFRkdISUpLTE1OT1BRUlNUVVZXWFlaW1xdXl9gYWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXp7fH1+f4CBgoOEhYaHiImKi4yNjo+QkZKTlJWWl5iZmpucnZ6foKGio6SlpqeoqaqrrK2ur7CxsrO0tba3uLm6u7y9vr/AwcLDxMXGx8jJysvMzc7P0NHS09TV1tfY2drb3N3e3+Dh4uPk5ebn6Onq6+zt7u/w8fLz9PX29/j5+vv8/f7/"></audio>
+    <audio id="incorrect-sound" src="data:audio/mpeg;base64,UklGRqYAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YaQAAABMAAAAAAAAAP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/w-"></audio>
+    <footer class="footer"></footer>
 
-    <footer class="footer"><!-- Footer content loaded by script.js --></footer>
-
-    <script src="script.js"></script>
+    <script src="script.js"></script> <!-- Your existing script for nav/footer -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- DATA ---
             const sentences = [
-                { category: 'subject', sentence: '___ woon in een klein dorp.', answer: ['ik'], tip: "When you talk about yourself, use 'ik'." },
-                { category: 'subject', sentence: 'Mijn broer heet David. ___ is 20 jaar oud.', answer: ['hij'], tip: "For a male person ('mijn broer'), we use 'hij'." },
-                { category: 'subject', sentence: 'De zon schijnt. ___ is warm vandaag.', answer: ['het'], tip: "For weather, time, and 'het-woorden' like 'het weer', we use 'het'." },
-                { category: 'subject', sentence: 'Mijn zus en ik gaan weg. ___ kopen kaartjes.', answer: ['wij', 'we'], tip: "When you include yourself in a group ('... en ik'), use 'wij' or 'we'." },
-                { category: 'subject', sentence: '(To a friend) Waarom drink ___ geen koffie?', answer: ['jij', 'je'], tip: "When speaking to one friend (informal), use 'jij' or 'je'." },
-                { category: 'subject', sentence: '(To a group) Hebben ___ zin in een pizza?', answer: ['jullie'], tip: "When speaking to a group of people, use 'jullie'." },
-                { category: 'subject', sentence: 'De buren zijn aardig. ___ hebben een hond.', answer: ['zij', 'ze'], tip: "For a group of other people ('de buren'), use 'zij' or 'ze'." },
-                { category: 'subject', sentence: '(Formal) Goedemorgen, heeft ___ een moment tijd?', answer: ['u'], tip: "In formal situations or when showing respect, use 'u'." },
-                { category: 'object', sentence: 'Ik zie de postbode. Ik geef ___ een brief.', answer: ['hem'], tip: "'De postbode' is a de-woord (male), so the object pronoun is 'hem'." },
-                { category: 'object', sentence: 'Mikaella is mijn vriendin. Ik bel ___ elke dag.', answer: ['haar'], tip: "For a female person ('Mikaella', 'vriendin'), the object pronoun is 'haar'." },
-                { category: 'object', sentence: 'Dit is mijn nieuwe telefoon. Vind je ___ mooi?', answer: ['hem'], tip: "Even for things, if it's a 'de-woord' ('de telefoon'), we use 'hem' as the object." },
-                { category: 'object', sentence: 'Ik begrijp het niet. Kun je ___ helpen?', answer: ['mij', 'me'], tip: "When 'I' is the object of the sentence, we use 'mij' or 'me'." },
-                { category: 'object', sentence: 'Waar is mijn paspoort? Heb jij ___ gezien?', answer: ['het'], tip: "For 'het-woorden' ('het paspoort'), the object pronoun is also 'het'." },
-                { category: 'object', sentence: 'Wij hebben honger. De ober brengt ___ de menukaart.', answer: ['ons'], tip: "When 'we' ('wij') is the object of the sentence, we use 'ons'." },
-                { category: 'demonstrative', sentence: '___ boek hier is erg spannend. (het-woord, close by)', answer: ['dit'], tip: "For a 'het-woord' that is close by, we use 'dit'." },
-                { category: 'demonstrative', sentence: 'Zie je ___ man daar? (de-woord, far away)', answer: ['die'], tip: "For a 'de-woord' that is far away, we use 'die'." },
-                { category: 'demonstrative', sentence: '___ pen op mijn bureau is van mij. (de-woord, close by)', answer: ['deze'], tip: "For a 'de-woord' that is close by, we use 'deze'." },
-                { category: 'demonstrative', sentence: '___ huis in de verte is te koop. (het-woord, far away)', answer: ['dat'], tip: "For a 'het-woord' that is far away, we use 'dat'." },
-                { category: 'subject', sentence: '___ ga morgen naar de markt.', answer: ['ik'], tip: "Talking about yourself again uses 'ik'." },
-                { category: 'object', sentence: 'De leraar helpt ___.', answer: ['ons'], tip: "When the teacher helps 'us', use 'ons'." },
-                { category: 'demonstrative', sentence: 'Ken je ___ meisje daar? (het-woord, far away)', answer: ['dat'], tip: "For a 'het-woord' far away, we use 'dat'." }
+                // Sentence data... (same as previous implementation)
+                { category: 'subject', sentence: '___ woon in een klein dorp.', answer: ['ik'] }, { category: 'subject', sentence: 'Mijn broer heet David. ___ is 20 jaar oud.', answer: ['hij'] }, { category: 'subject', sentence: 'De zon schijnt. ___ is warm vandaag.', answer: ['het'] }, { category: 'subject', sentence: 'Mijn zus en ik gaan weg. ___ kopen kaartjes.', answer: ['wij', 'we'] }, { category: 'subject', sentence: '(To a friend) Waarom drink ___ geen koffie?', answer: ['jij', 'je'] }, { category: 'subject', sentence: '(To a group) Hebben ___ zin in een pizza?', answer: ['jullie'] }, { category: 'subject', sentence: 'De buren zijn aardig. ___ hebben een hond.', answer: ['zij', 'ze'] }, { category:'subject', sentence: '(Formal) Goedemorgen, heeft ___ een moment tijd?', answer: ['u'] }, { category: 'subject', sentence: 'Vandaag ga ___ vroeg naar huis.', answer: ['ik'] }, { category: 'subject', sentence: 'De kinderen spelen buiten. ___ maken veel lawaai.', answer: ['zij', 'ze'] },
+                { category: 'object', sentence: 'Ik zie de postbode. Ik geef ___ een brief.', answer: ['hem'] }, { category: 'object', sentence: 'Mikaella is mijn vriendin. Ik bel ___ elke dag.', answer: ['haar'] }, { category: 'object', sentence: 'Dit is mijn nieuwe telefoon. Vind je ___ mooi?', answer: ['hem'] }, { category: 'object', sentence: 'Ik begrijp het niet. Kun je ___ helpen?', answer: ['mij', 'me'] }, { category: 'object', sentence: 'Onze leraar is ziek. We sturen ___ een kaart.', answer: ['hem'] }, { category: 'object', sentence: 'Waar is mijn paspoort? Heb jij ___ gezien?', answer: ['het'] }, { category: 'object', sentence: 'De honden hebben dorst. Ik geef ___ water.', answer: ['ze', 'hen'] }, { category: 'object', sentence: 'Kijk naar ___! Ik heb een nieuwe jas.', answer: ['mij', 'me'] }, { category: 'object', sentence: '(Formal) Meneer, kan ik ___ iets vragen?', answer: ['u'] }, { category: 'object', sentence: 'Wij hebben honger. De ober brengt ___ de menukaart.', answer: ['ons'] },
+                { category: 'demonstrative', sentence: '___ boek hier is erg spannend. (het-woord)', answer: ['dit'] }, { category: 'demonstrative', sentence: 'Zie je ___ man daar? (de-woord)', answer: ['die'] }, { category: 'demonstrative', sentence: '___ pen op mijn bureau is van mij. (de-woord)', answer: ['deze'] }, { category: 'demonstrative', sentence: '___ huis in de verte is te koop. (het-woord)', answer: ['dat'] }, { category: 'demonstrative', sentence: 'Ik wil graag ___ twee croissants, alstublieft.', answer: ['deze'] }, { category: 'demonstrative', sentence: 'Wat kost ___ schilderij daar aan de muur?', answer: ['dat'] }, { category: 'demonstrative', sentence: '___ stoelen hier zijn nieuw.', answer: ['deze'] }, { category: 'demonstrative', sentence: 'Vind je ___ jurk in de etalage mooi?', answer: ['die'] }, { category: 'demonstrative', sentence: '___ is een goed idee!', answer: ['dat', 'dit'] }, { category: 'demonstrative', sentence: 'Is ___ jouw glas hier?', answer: ['dit'] },
             ];
 
             // --- DOM Elements ---
-            const elements = {
-                categorySelection: document.getElementById('category-selection'),
-                practiceArea: document.getElementById('practice-area'),
-                completionScreen: document.getElementById('completion-screen'),
-                sentenceContainer: document.getElementById('sentence-container'),
-                answerInput: document.getElementById('answer-input'),
-                checkBtn: document.getElementById('check-btn'),
-                nextBtn: document.getElementById('next-btn'),
-                progressBar: document.getElementById('progress-bar'),
-                progressText: document.getElementById('progress-text'),
-                streakCounter: document.getElementById('streak-counter'),
-                hintBtn: document.getElementById('hint-btn'),
-                hintCounter: document.getElementById('hint-counter'),
-                finalScoreEl: document.getElementById('final-score'),
-                finalStreakEl: document.getElementById('final-streak'),
-                highScoreEl: document.getElementById('high-score'),
-                playAgainBtn: document.getElementById('play-again-btn'),
-                practiceMistakesBtn: document.getElementById('practice-mistakes-btn'),
-                mixedBtn: document.getElementById('mixed-btn'),
-                toast: document.getElementById('toast'),
-                correctSound: document.getElementById('correct-sound'),
-                incorrectSound: document.getElementById('incorrect-sound'),
-                muteBtn: document.getElementById('mute-btn'),
-                timerBtn: document.getElementById('timer-mode-btn'),
-                timerDisplay: document.getElementById('timer-display'),
-                uilbertMascot: document.getElementById('uilbert-mascot'),
-                feedbackBubble: document.getElementById('feedback-bubble'),
-                feedbackMessage: document.getElementById('feedback-message'),
-                smartTip: document.getElementById('smart-tip'),
-            };
+            const categorySelection = document.getElementById('category-selection');
+            const practiceArea = document.getElementById('practice-area');
+            const completionScreen = document.getElementById('completion-screen');
+            const sentenceContainer = document.getElementById('sentence-container');
+            const answerInput = document.getElementById('answer-input');
+            const checkBtn = document.getElementById('check-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const feedbackMessage = document.getElementById('feedback-message');
+            const progressBar = document.getElementById('progress-bar');
+            const progressText = document.getElementById('progress-text');
+            const streakCounter = document.getElementById('streak-counter');
+            const hintBtn = document.getElementById('hint-btn');
+            const hintCounter = document.getElementById('hint-counter');
+            const finalScoreEl = document.getElementById('final-score');
+            const finalStreakEl = document.getElementById('final-streak');
+            const highScoreEl = document.getElementById('high-score');
+            const playAgainBtn = document.getElementById('play-again-btn');
+            const mixedBtn = document.getElementById('mixed-btn');
+            const toast = document.getElementById('toast');
+            const correctSound = document.getElementById('correct-sound');
+            const incorrectSound = document.getElementById('incorrect-sound');
 
             // --- Game State & Constants ---
-            const state = {
-                currentSentences: [],
-                mistakes: [],
-                currentQuestionIndex: 0,
-                currentCategory: '',
-                score: 0,
-                currentStreak: 0,
-                bestStreakInRound: 0,
-                hintTokens: 3,
-                isMuted: false,
-                achievements: {},
-                highScores: {},
-                QUESTIONS_PER_ROUND: 10,
-                UNLOCK_SCORE: 8,
-                STREAK_MILESTONE: 5,
-                TIMER_DURATION: 15,
-                timerMode: false,
-                timeLeft: 0,
-                timerInterval: null
-            };
+            let currentSentences = [];
+            let currentQuestionIndex = 0;
+            let currentCategory = '';
+            let score = 0;
+            let currentStreak = 0;
+            let bestStreakInRound = 0;
+            let hintTokens = 3;
+            let achievements = {};
+            let highScores = {};
+            const QUESTIONS_PER_ROUND = 10;
+            const UNLOCK_SCORE = 8;
 
             // --- Core Game Logic ---
-            function startGame(category, questions) {
-                state.currentCategory = category;
-                state.currentSentences = questions || shuffleArray(sentences.filter(s => s.category === category || category === 'mixed')).slice(0, state.QUESTIONS_PER_ROUND);
-                
-                state.currentQuestionIndex = 0;
-                state.score = 0;
-                state.currentStreak = 0;
-                state.bestStreakInRound = 0;
-                state.hintTokens = 3;
-                state.mistakes = [];
+            function startGame(category) {
+                currentCategory = category;
+                let filteredSentences = sentences;
+                if (category !== 'mixed') {
+                    filteredSentences = sentences.filter(s => s.category === category);
+                }
+                currentSentences = shuffleArray(filteredSentences).slice(0, QUESTIONS_PER_ROUND);
 
-                elements.categorySelection.classList.add('hidden');
-                elements.completionScreen.classList.add('hidden');
-                elements.practiceArea.classList.remove('hidden');
-                elements.timerDisplay.classList.toggle('hidden', !state.timerMode);
+                currentQuestionIndex = 0;
+                score = 0;
+                currentStreak = 0;
+                bestStreakInRound = 0;
+                hintTokens = 3;
 
                 updateStreakDisplay();
                 updateHintDisplay();
+                categorySelection.classList.add('hidden');
+                completionScreen.classList.add('hidden');
+                practiceArea.classList.remove('hidden');
                 displayQuestion();
             }
 
             function displayQuestion() {
                 resetInput();
                 updateProgressBar();
-                setUilbertExpression('neutral');
-                if (state.timerMode) {
-                    state.timeLeft = state.TIMER_DURATION;
-                    startTimer();
-                }
-                const question = state.currentSentences[state.currentQuestionIndex];
-                elements.sentenceContainer.textContent = question.sentence;
+                const question = currentSentences[currentQuestionIndex];
+                sentenceContainer.textContent = question.sentence;
             }
 
             function checkAnswer() {
-                const userAnswer = elements.answerInput.value.trim().toLowerCase();
+                const userAnswer = answerInput.value.trim().toLowerCase();
+                const correctAnswerArray = currentSentences[currentQuestionIndex].answer;
+                
                 if (!userAnswer) return;
 
-                if (state.timerMode) stopTimer();
+                answerInput.disabled = true;
+                hintBtn.disabled = true;
+                checkBtn.classList.add('hidden');
+                nextBtn.classList.remove('hidden');
 
-                const question = state.currentSentences[state.currentQuestionIndex];
-                const isCorrect = question.answer.includes(userAnswer);
-
-                elements.answerInput.disabled = true;
-                elements.hintBtn.disabled = true;
-                elements.checkBtn.classList.add('hidden');
-                elements.nextBtn.classList.remove('hidden');
-                elements.feedbackBubble.classList.remove('hidden');
-
-                if (isCorrect) {
-                    elements.feedbackMessage.textContent = 'Correct! 🎉';
-                    elements.feedbackMessage.className = 'correct';
-                    elements.answerInput.classList.add('correct-answer');
-                    elements.smartTip.classList.add('hidden');
-                    playSound(elements.correctSound);
+                if (correctAnswerArray.includes(userAnswer)) {
+                    feedbackMessage.textContent = 'Correct! 🎉';
+                    feedbackMessage.className = 'correct';
+                    answerInput.classList.add('correct-answer');
+                    correctSound.play();
                     triggerConfetti();
-                    setUilbertExpression('happy');
-                    state.score++;
-                    state.currentStreak++;
-                    if(state.currentStreak > state.bestStreakInRound) state.bestStreakInRound = state.currentStreak;
-                    checkAndAwardAchievement('onfire', state.currentStreak >= state.STREAK_MILESTONE);
+                    score++;
+                    currentStreak++;
+                    if(currentStreak > bestStreakInRound) bestStreakInRound = currentStreak;
+                    checkAndAwardAchievement('onfire', currentStreak >= 5);
                 } else {
-                    elements.feedbackMessage.textContent = `Not quite. Correct was: ${question.answer.join(' / ')}`;
-                    elements.feedbackMessage.className = 'incorrect';
-                    elements.answerInput.classList.add('incorrect-answer');
-                    elements.smartTip.textContent = `💡 Tip: ${question.tip}`;
-                    elements.smartTip.classList.remove('hidden');
-                    playSound(elements.incorrectSound);
-                    setUilbertExpression('thinking');
-                    state.currentStreak = 0;
-                    state.mistakes.push(question);
+                    feedbackMessage.textContent = `Not quite. Correct was: ${correctAnswerArray.join(' / ')}`;
+                    feedbackMessage.className = 'incorrect';
+                    answerInput.classList.add('incorrect-answer');
+                    incorrectSound.play();
+                    currentStreak = 0;
                 }
                 updateStreakDisplay();
             }
 
             function useHint() {
-                if (state.hintTokens > 0) {
-                    state.hintTokens--;
-                    state.currentStreak = 0;
+                if (hintTokens > 0) {
+                    hintTokens--;
+                    currentStreak = 0; // Cost of using a hint
                     updateStreakDisplay();
                     updateHintDisplay();
-                    const correctAnswer = state.currentSentences[state.currentQuestionIndex].answer[0];
-                    elements.answerInput.value = correctAnswer.charAt(0);
-                    elements.answerInput.focus();
+                    const correctAnswer = currentSentences[currentQuestionIndex].answer[0];
+                    answerInput.value = correctAnswer.charAt(0);
+                    answerInput.focus();
                 }
             }
 
             function nextQuestion() {
-                if (state.timerMode) stopTimer();
-                state.currentQuestionIndex++;
-                if (state.currentQuestionIndex < state.currentSentences.length) {
+                currentQuestionIndex++;
+                if (currentQuestionIndex < QUESTIONS_PER_ROUND) {
                     displayQuestion();
                 } else {
                     showCompletion();
@@ -330,226 +312,171 @@
             }
 
             function showCompletion() {
-                if (state.timerMode) stopTimer();
-                const oldHighScore = state.highScores[state.currentCategory] || 0;
-                if (state.score > oldHighScore) {
-                    state.highScores[state.currentCategory] = state.score;
+                // Update stats and save progress
+                const oldHighScore = highScores[currentCategory] || 0;
+                if (score > oldHighScore) {
+                    highScores[currentCategory] = score;
                 }
-                
-                checkAndAwardAchievement('beginner', true);
-                checkAndAwardAchievement('specialist', state.score === state.currentSentences.length && state.currentSentences.length > 0);
-                checkAndAwardAchievement('pro', state.currentCategory === 'mixed');
                 saveProgress();
 
-                elements.finalScoreEl.textContent = `${state.score} / ${state.currentSentences.length}`;
-                elements.finalStreakEl.textContent = state.bestStreakInRound;
-                elements.highScoreEl.textContent = `${state.highScores[state.currentCategory] || 0} / ${state.QUESTIONS_PER_ROUND}`;
-                if (state.score > oldHighScore && state.score > 0) {
-                    elements.highScoreEl.innerHTML += ` <span class="new-high-score">New Best!</span>`;
+                // Check for achievements
+                checkAndAwardAchievement('beginner', true);
+                checkAndAwardAchievement('specialist', score === QUESTIONS_PER_ROUND);
+                checkAndAwardAchievement('pro', currentCategory === 'mixed');
+                
+                // Display final stats
+                finalScoreEl.textContent = `${score} / ${QUESTIONS_PER_ROUND}`;
+                finalStreakEl.textContent = bestStreakInRound;
+                highScoreEl.textContent = `${highScores[currentCategory]} / ${QUESTIONS_PER_ROUND}`;
+                if (score > oldHighScore && score > 0) {
+                    highScoreEl.innerHTML += ` <span class="new-high-score">New Best!</span>`;
                 }
-                
-                elements.practiceMistakesBtn.classList.toggle('hidden', state.mistakes.length === 0);
-                setUilbertExpression(state.score > oldHighScore ? 'very-happy' : 'happy');
-                
-                elements.practiceArea.classList.add('hidden');
-                elements.completionScreen.classList.remove('hidden');
-                elements.timerDisplay.classList.add('hidden');
+
+                practiceArea.classList.add('hidden');
+                completionScreen.classList.remove('hidden');
                 updateUIFromState();
             }
             
-            // --- UI & Feedback Helpers ---
+            // --- UI & Feedback ---
             function resetInput() {
-                elements.answerInput.value = '';
-                elements.answerInput.disabled = false;
-                elements.hintBtn.disabled = state.hintTokens === 0;
-                elements.answerInput.className = '';
-                elements.feedbackBubble.classList.add('hidden');
-                elements.smartTip.classList.add('hidden');
-                elements.checkBtn.classList.remove('hidden');
-                elements.nextBtn.classList.add('hidden');
-                elements.answerInput.focus();
-            }
-
-            function setUilbertExpression(expression) {
-                elements.uilbertMascot.className = expression;
+                answerInput.value = '';
+                answerInput.disabled = false;
+                hintBtn.disabled = false;
+                answerInput.className = '';
+                feedbackMessage.textContent = '';
+                feedbackMessage.className = '';
+                checkBtn.classList.remove('hidden');
+                nextBtn.classList.add('hidden');
+                answerInput.focus();
             }
 
             function updateProgressBar() {
-                const totalQuestions = state.currentSentences.length;
-                const progress = totalQuestions > 0 ? (state.currentQuestionIndex / totalQuestions) * 100 : 0;
-                elements.progressBar.style.width = `${progress}%`;
-                elements.progressText.textContent = `Question ${state.currentQuestionIndex + 1} of ${totalQuestions}`;
+                const progress = ((currentQuestionIndex) / QUESTIONS_PER_ROUND) * 100;
+                progressBar.style.width = `${progress}%`;
+                progressText.textContent = `Question ${currentQuestionIndex + 1} of ${QUESTIONS_PER_ROUND}`;
             }
 
             function updateStreakDisplay() {
-                elements.streakCounter.textContent = state.currentStreak > 1 ? `${state.currentStreak} 🔥` : '';
-            }
-
-            function updateHintDisplay() {
-                elements.hintCounter.textContent = `(${state.hintTokens} left)`;
-                elements.hintBtn.disabled = state.hintTokens === 0;
-            }
-            
-            function playSound(sound) {
-                if (!state.isMuted) {
-                    sound.currentTime = 0;
-                    sound.play();
+                if (currentStreak > 1) {
+                    streakCounter.textContent = `${currentStreak} 🔥`;
+                } else {
+                    streakCounter.textContent = '';
                 }
             }
 
-            function startTimer() {
-                clearInterval(state.timerInterval);
-                updateTimerDisplay();
-                state.timerInterval = setInterval(() => {
-                    state.timeLeft--;
-                    updateTimerDisplay();
-                    if (state.timeLeft <= 0) {
-                        clearInterval(state.timerInterval);
-                        elements.answerInput.value = '';
-                        checkAnswer();
-                    }
-                }, 1000);
-            }
-
-            function stopTimer() {
-                clearInterval(state.timerInterval);
-                state.timeLeft = 0;
-                updateTimerDisplay();
-            }
-
-            function updateTimerDisplay() {
-                elements.timerDisplay.textContent = `⏱ ${state.timeLeft}s`;
+            function updateHintDisplay() {
+                hintCounter.textContent = `(${hintTokens} left)`;
+                hintBtn.disabled = hintTokens === 0;
             }
 
             function triggerConfetti() {
-                if (!state.isMuted) {
-                    const options = { particleCount: 80, spread: 60, origin: { y: 0.7 } };
-                    if (state.currentStreak > 0 && (state.currentStreak + 1) % state.STREAK_MILESTONE === 0) {
-                        options.particleCount = 200;
-                        options.spread = 100;
-                    }
-                    confetti(options);
+                if (currentStreak > 0 && (currentStreak + 1) % 5 === 0) {
+                    // Bigger celebration for streak milestones
+                    confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 } });
+                } else {
+                    confetti({ particleCount: 80, spread: 60, origin: { y: 0.7 } });
                 }
             }
             
             function showToast(message) {
-                elements.toast.innerHTML = `<span class="emoji">🏆</span> ${message}`;
-                elements.toast.classList.add('show');
-                setTimeout(() => elements.toast.classList.remove('show'), 4000);
+                toast.textContent = message;
+                toast.classList.remove('hidden');
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 4000);
             }
 
             // --- LocalStorage & Progress ---
             function saveProgress() {
-                const progress = { highScores: state.highScores, achievements: state.achievements, isMuted: state.isMuted };
+                const progress = { highScores, achievements };
                 localStorage.setItem('safeHavenPronounGame', JSON.stringify(progress));
             }
 
             function loadProgress() {
-                const saved = JSON.parse(localStorage.getItem('safeHavenPronounGame'));
-                if (saved) {
-                    state.highScores = saved.highScores || {};
-                    state.achievements = saved.achievements || {};
-                    state.isMuted = saved.isMuted || false;
+                const savedProgress = JSON.parse(localStorage.getItem('safeHavenPronounGame'));
+                if (savedProgress) {
+                    highScores = savedProgress.highScores || {};
+                    achievements = savedProgress.achievements || {};
                 }
             }
 
             function checkAndAwardAchievement(id, condition) {
-                if (condition && !state.achievements[id]) {
-                    state.achievements[id] = true;
-                    const badge = document.querySelector(`#achievements-container [data-id='${id}']`);
-                    const message = badge.getAttribute('data-tooltip');
-                    showToast(`Achievement: ${message}!`);
+                if (condition && !achievements[id]) {
+                    achievements[id] = true;
                     saveProgress();
                     updateAchievementsUI();
+                    const badge = document.getElementById(`badge-${id}`);
+                    const message = badge.getAttribute('data-tooltip');
+                    showToast(`🏆 Achievement Unlocked: ${message}!`);
                 }
             }
             
             function updateUIFromState() {
-                // Update Achievements
-                document.querySelectorAll('#achievements-container .badge').forEach(badge => {
-                    const id = badge.dataset.id;
-                    badge.classList.toggle('unlocked', !!state.achievements[id]);
-                    badge.classList.toggle('locked', !state.achievements[id]);
-                });
+                // Update achievements display
+                updateAchievementsUI();
 
-                // Update Challenge Mode button
-                const allUnlocked = ['subject', 'object', 'demonstrative'].every(cat => (state.highScores[cat] || 0) >= state.UNLOCK_SCORE);
-                elements.mixedBtn.disabled = !allUnlocked;
-                elements.mixedBtn.setAttribute('data-tooltip', allUnlocked ? '' : `Score ${state.UNLOCK_SCORE}/10 in other categories to unlock`);
-
-                // Update Mute Button
-                elements.muteBtn.innerHTML = `<i class="fas ${state.isMuted ? 'fa-volume-xmark' : 'fa-volume-high'}"></i>`;
-                elements.timerBtn.innerHTML = state.timerMode ? '<i class="fas fa-stopwatch"></i>' : '<i class="far fa-stopwatch"></i>';
-                elements.timerDisplay.classList.toggle('hidden', !state.timerMode);
+                // Update Challenge Mode button state
+                const allUnlocked = (highScores.subject >= UNLOCK_SCORE) && 
+                                    (highScores.object >= UNLOCK_SCORE) && 
+                                    (highScores.demonstrative >= UNLOCK_SCORE);
+                
+                if (allUnlocked) {
+                    mixedBtn.disabled = false;
+                    mixedBtn.removeAttribute('data-tooltip');
+                } else {
+                    mixedBtn.disabled = true;
+                    mixedBtn.setAttribute('data-tooltip', `Score ${UNLOCK_SCORE}/10 in other categories to unlock`);
+                }
             }
-            
-            function createAchievements() {
-                const achData = [
-                    { id: 'beginner', icon: 'fa-seedling', tooltip: 'Complete your first round' },
-                    { id: 'specialist', icon: 'fa-star', tooltip: 'Get a perfect score' },
-                    { id: 'onfire', icon: 'fa-fire', tooltip: 'Achieve a 5-answer streak' },
-                    { id: 'pro', icon: 'fa-crown', tooltip: 'Unlock and complete Challenge Mode' },
-                ];
-                const container = document.getElementById('achievements-container');
-                container.innerHTML = `<h3><i class="fas fa-medal"></i> Your Achievements</h3><div class="badge-grid"></div>`;
-                const grid = container.querySelector('.badge-grid');
-                achData.forEach(a => {
-                    grid.innerHTML += `<div class="badge locked" data-id="${a.id}" data-tooltip="${a.tooltip}"><div class="icon"><i class="fas ${a.icon}"></i></div><p class="title">${a.tooltip}</p></div>`;
-                });
-                container.classList.remove('hidden');
+
+            function updateAchievementsUI() {
+                for (const id in achievements) {
+                    if (achievements[id]) {
+                        document.getElementById(`badge-${id}`).classList.remove('locked');
+                        document.getElementById(`badge-${id}`).classList.add('unlocked');
+                    }
+                }
+            }
+
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
             }
             
             // --- Initial Setup & Event Listeners ---
             function initialize() {
                 loadProgress();
-                createAchievements();
                 updateUIFromState();
             }
 
-            elements.categorySelection.addEventListener('click', (e) => {
+            categorySelection.addEventListener('click', (e) => {
                 if (e.target.matches('button') && !e.target.disabled) {
                     startGame(e.target.dataset.category);
                 }
             });
 
-            elements.practiceMistakesBtn.addEventListener('click', () => {
-                startGame('mistakes', state.mistakes);
+            checkBtn.addEventListener('click', checkAnswer);
+            nextBtn.addEventListener('click', nextQuestion);
+            hintBtn.addEventListener('click', useHint);
+            playAgainBtn.addEventListener('click', () => {
+                completionScreen.classList.add('hidden');
+                categorySelection.classList.remove('hidden');
             });
-            
-            elements.muteBtn.addEventListener('click', () => {
-                state.isMuted = !state.isMuted;
-                saveProgress();
-                updateUIFromState();
-            });
-
-            elements.timerBtn.addEventListener('click', () => {
-                state.timerMode = !state.timerMode;
-                if (state.timerMode) {
-                    state.timeLeft = state.TIMER_DURATION;
-                    startTimer();
-                } else {
-                    stopTimer();
+            answerInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && !checkBtn.classList.contains('hidden')) {
+                    checkAnswer();
+                } else if (e.key === 'Enter' && !nextBtn.classList.contains('hidden')) {
+                    nextQuestion();
                 }
-                updateUIFromState();
             });
 
-            elements.checkBtn.addEventListener('click', checkAnswer);
-            elements.nextBtn.addEventListener('click', nextQuestion);
-            elements.hintBtn.addEventListener('click', useHint);
-            elements.playAgainBtn.addEventListener('click', () => {
-                elements.completionScreen.classList.add('hidden');
-                elements.categorySelection.classList.remove('hidden');
-                if (state.timerMode) stopTimer();
-                setUilbertExpression('neutral');
-            });
-            elements.answerInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' && !elements.checkBtn.classList.contains('hidden')) checkAnswer();
-                else if (e.key === 'Enter' && !elements.nextBtn.classList.contains('hidden')) nextQuestion();
-            });
-
-            // Let's go!
             initialize();
         });
     </script>
+
 </body>
 </html>
