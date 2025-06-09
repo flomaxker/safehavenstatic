@@ -60,7 +60,13 @@
         #completion-stats { display: flex; justify-content: center; gap: 2rem; margin: 1rem 0 2rem 0; text-align: center; flex-wrap: wrap; }
         .stat-item h4 { color: var(--color-text-light); margin-bottom: 0.25rem; font-size: 1rem; font-weight: 500; }
         .stat-item p { color: var(--color-primary); font-size: 1.8rem; font-weight: 700; margin: 0; }
-        .new-high-score { color: var(--color-accent); font-weight: 700; }
+        .new-high-score {
+            color: var(--color-accent);
+            font-weight: 700;
+            font-size: 1rem;
+            margin-top: 0.25rem;
+            display: block;
+        }
         .hidden { display: none; }
 
         #timer-container { width: 100%; background-color: #fee2e2; border-radius: 8px; overflow: hidden; position: relative; height: 20px; margin-bottom: 1rem; }
@@ -77,6 +83,23 @@
         .badge.locked .title { color: #9ca3af; }
         .badge.unlocked .icon { background-color: var(--color-secondary); color: var(--color-white); transform: scale(1.1); box-shadow: 0 4px 10px rgba(20, 184, 166, 0.4); }
         .badge.unlocked .title { color: var(--color-heading); }
+
+        /* Category Completion Indicator */
+        .category-btn { position: relative; }
+        .category-btn.completed {
+            background-color: var(--color-success);
+            color: var(--color-white);
+        }
+        .category-btn.completed::after {
+            content: '\f058';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+        }
 
         /* Tooltip for locked button */
         [data-tooltip] { position: relative; }
@@ -125,16 +148,16 @@
                 <p class="intro-text">Master Dutch pronouns in a fun way! Choose a category, track your high scores, and unlock achievements. Veel succes!</p>
             </div>
             <div id="game-field" class="game-field">
-            <div id='start-screen'>
+            <div id="start-screen">
                 <h2><span class="emoji">🎮</span> Ready to Play?</h2>
                 <p>Welcome! Press Start to choose a category. You'll answer 10 questions per round. Type the missing word and hit Enter. Use hints if you're stuck — they reset your streak. Score 8/10 in each category to unlock Challenge Mode. Your progress saves automatically and you can toggle sounds with the speaker icon.</p>
-                <button id='start-btn' class='btn btn-primary'>Start</button>
+                <button id="start-btn" class="btn btn-primary">Start</button>
             </div>
             <!-- Category Selection -->
             <div id="category-selection" class="hidden">
-                <button class="btn btn-primary" data-category="subject">Subject Pronouns</button>
-                <button class="btn btn-primary" data-category="object">Object Pronouns</button>
-                <button class="btn btn-secondary" data-category="demonstrative">Demonstratives</button>
+                <button class="btn btn-primary category-btn" data-category="subject">Subject Pronouns</button>
+                <button class="btn btn-primary category-btn" data-category="object">Object Pronouns</button>
+                <button class="btn btn-primary category-btn" data-category="demonstrative">Demonstratives</button>
                 <button id="mixed-btn" class="btn btn-secondary" data-category="mixed" disabled>Challenge Mode</button>
             </div>
 
@@ -181,6 +204,7 @@
                     <div class="stat-item">
                         <h4>High Score</h4>
                         <p id="high-score">0 / 10</p>
+                        <p id="new-high-score-message" class="new-high-score hidden">New Best!</p>
                     </div>
                 </div>
                 <button id="play-again-btn" class="btn btn-primary">Play Another Round</button>
@@ -269,7 +293,6 @@
                 { category: 'subject', sentence: 'De auto start niet. ___ heeft geen benzine.', answer: ['hij'], explanation: '"Auto" is de-word -> "hij".' },
                 { category: 'subject', sentence: 'Kinderen, willen ___ wat drinken?', answer: ['jullie'], explanation: 'Addressing children -> "jullie".' },
                 { category: 'subject', sentence: 'Het weer verandert. ___ wordt kouder.', answer: ['het'], explanation: 'Weather/conditions use "het".' },
-
                 { category: 'object', sentence: 'Ik zie de postbode. Ik geef ___ een brief.', answer: ['hem'], explanation: 'Use "hem" for a male person.' },
                 { category: 'object', sentence: 'Mijn vriendin is jarig. Ik bel ___ meteen.', answer: ['haar'], explanation: 'Female person -> "haar".' },
                 { category: 'object', sentence: 'Dit is mijn nieuwe telefoon. Vind je ___ mooi?', answer: ['hem'], explanation: '"Telefoon" is a de-word, so object pronoun is "hem".' },
@@ -374,6 +397,7 @@
             const finalScoreEl = document.getElementById('final-score');
             const finalStreakEl = document.getElementById('final-streak');
             const highScoreEl = document.getElementById('high-score');
+            const newHighScoreMessage = document.getElementById('new-high-score-message');
             const playAgainBtn = document.getElementById('play-again-btn');
             const practiceMistakesBtn = document.getElementById('practice-mistakes-btn');
             const mixedBtn = document.getElementById('mixed-btn');
@@ -433,6 +457,7 @@
 
                 updateStreakDisplay();
                 updateHintDisplay();
+                newHighScoreMessage.classList.add('hidden');
                 categorySelection.classList.add('hidden');
                 completionScreen.classList.add('hidden');
                 practiceArea.classList.remove('hidden');
@@ -453,11 +478,25 @@
                 updateHintDisplay();
             }
 
+            function normalizeAnswer(ans) {
+                return ans.toString()
+                          .trim()
+                          .toLowerCase()
+                          .normalize('NFD')
+                          .replace(/[\u0300-\u036f]/g, '')
+                          .replace(/[.!?]/g, '');
+            }
+
+            function isCorrectAnswer(userAns, correctArray) {
+                const normalizedUser = normalizeAnswer(userAns);
+                return correctArray.some(a => normalizeAnswer(a) === normalizedUser);
+            }
+
             function checkAnswer() {
-                const userAnswer = answerInput.value.trim().toLowerCase();
+                const userAnswer = answerInput.value;
                 const correctAnswerArray = currentSentences[currentQuestionIndex].answer;
                 
-                if (!userAnswer) return;
+                if (!userAnswer.trim()) return;
 
                 answerInput.disabled = true;
                 stopTimer();
@@ -465,7 +504,7 @@
                 checkBtn.classList.add('hidden');
                 nextBtn.classList.remove('hidden');
 
-                if (correctAnswerArray.includes(userAnswer)) {
+                if (isCorrectAnswer(userAnswer, correctAnswerArray)) {
                     feedbackMessage.textContent = 'Correct! 🎉';
                     feedbackMessage.className = 'correct';
                     answerInput.classList.add('correct-answer');
@@ -517,10 +556,15 @@
                 stopTimer();
                 // Update stats and save progress
                 const oldHighScore = highScores[currentCategory] || 0;
+                const wasCompleted = oldHighScore >= UNLOCK_SCORE;
                 if (currentCategory !== 'mistakes' && score > oldHighScore) {
                     highScores[currentCategory] = score;
                 }
+                const nowCompleted = !wasCompleted && (currentCategory !== 'mistakes') && (score >= UNLOCK_SCORE);
                 saveProgress();
+                if (nowCompleted) {
+                    showToast(`✅ ${capitalize(currentCategory)} category finished!`);
+                }
 
                 // Check for achievements
                 checkAndAwardAchievement('beginner', true);
@@ -539,7 +583,9 @@
                 }
                 const isNewHighScore = score > oldHighScore && score > 0 && currentCategory !== 'mistakes';
                 if (isNewHighScore) {
-                    highScoreEl.innerHTML += ` <span class="new-high-score">New Best!</span>`;
+                    newHighScoreMessage.classList.remove('hidden');
+                } else {
+                    newHighScoreMessage.classList.add('hidden');
                 }
 
                 practiceMistakesBtn.classList.toggle('hidden', wrongQuestions.length === 0);
@@ -661,8 +707,21 @@
                 const savedProgress = JSON.parse(localStorage.getItem('safeHavenPronounGame'));
                 if (savedProgress) {
                     highScores = savedProgress.highScores || {};
+                    // Convert stored values to numbers for reliability
+                    for (const key in highScores) {
+                        highScores[key] = Number(highScores[key]) || 0;
+                    }
+                    let migrated = false;
+                    if (highScores.demonstratives !== undefined) {
+                        if (highScores.demonstrative === undefined || highScores.demonstrative < highScores.demonstratives) {
+                            highScores.demonstrative = highScores.demonstratives;
+                        }
+                        delete highScores.demonstratives;
+                        migrated = true;
+                    }
                     achievements = savedProgress.achievements || {};
                     soundEnabled = savedProgress.sound !== false;
+                    if (migrated) saveProgress();
                 }
             }
 
@@ -694,10 +753,25 @@
                 // Update achievements display
                 updateAchievementsUI();
 
+                // Mark completed categories
+                ['subject','object','demonstrative'].forEach(cat => {
+                    const btn = document.querySelector(`#category-selection button[data-category="${cat}"]`);
+                    if (!btn) return;
+                    btn.classList.add('category-btn');
+                    if (Number(highScores[cat] || 0) >= UNLOCK_SCORE) {
+                        btn.classList.add('completed');
+                    } else {
+                        btn.classList.remove('completed');
+                    }
+                });
+
                 // Update Challenge Mode button state
-                const allUnlocked = (highScores.subject >= UNLOCK_SCORE) && 
-                                    (highScores.object >= UNLOCK_SCORE) && 
-                                    (highScores.demonstrative >= UNLOCK_SCORE);
+                const demoScore = (highScores.demonstrative !== undefined)
+                                    ? highScores.demonstrative
+                                    : (highScores.demonstratives || 0);
+                const allUnlocked = (Number(highScores.subject || 0) >= UNLOCK_SCORE) &&
+                                    (Number(highScores.object || 0) >= UNLOCK_SCORE) &&
+                                    (Number(demoScore) >= UNLOCK_SCORE);
                 
                 if (allUnlocked) {
                     mixedBtn.disabled = false;
@@ -775,10 +849,16 @@
                 startScreen.classList.add("hidden");
                 categorySelection.classList.remove("hidden");
             });
+            // Allow answering the question with Enter while the input is active
             answerInput.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter' && !checkBtn.classList.contains('hidden')) {
                     checkAnswer();
-                } else if (e.key === 'Enter' && !nextBtn.classList.contains('hidden')) {
+                }
+            });
+
+            // Also listen globally so Enter can advance to the next question
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && !nextBtn.classList.contains('hidden')) {
                     nextQuestion();
                 }
             });
