@@ -24,8 +24,17 @@
         .tool-intro { text-align: center; margin-bottom: 2.5rem; }
         #category-selection { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-bottom: 3rem; }
         #category-selection .btn { min-width: 180px; }
-        #start-screen { text-align: center; margin-bottom: 2rem; }
-        #start-screen .btn { margin-top: 1rem; }
+        #start-screen {
+            text-align: center;
+            margin-bottom: 2rem;
+            background-color: #eff6ff;
+            border: 1px solid #dbeafe;
+            padding: 2rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
+        }
+        #start-screen p { font-size: 1.1rem; margin-bottom: 1.5rem; }
+        #start-screen .btn { margin-top: 0.5rem; }
         #practice-area { background-color: var(--color-bg); padding: 1.5rem 2.5rem 2rem; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07); border-left: 5px solid var(--color-primary); }
         .game-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; height: 30px; }
         #hint-container { font-size: 1rem; color: var(--color-text-light); }
@@ -106,6 +115,7 @@
                 <p class="intro-text">Master Dutch pronouns in a fun way! Choose a category, track your high scores, and unlock achievements. Veel succes!</p>
             </div>
             <div id='start-screen'>
+                <h2><span class="emoji">🎮</span> Ready to Play?</h2>
                 <p>Welcome! Press Start to choose a category. You'll answer 10 questions per round. Type the missing word and hit Enter. Use hints if you're stuck — they reset your streak. Score 8/10 in each category to unlock Challenge Mode. Your progress saves automatically and you can toggle sounds with the speaker icon.</p>
                 <button id='start-btn' class='btn btn-primary'>Start</button>
             </div>
