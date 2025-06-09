@@ -29,6 +29,7 @@
         #hint-btn:hover:not(:disabled) { background-color: var(--color-primary); color: var(--color-white); border-color: var(--color-primary); }
         #hint-btn:disabled { opacity: 0.5; cursor: not-allowed; }
         #streak-counter { font-size: 1.5rem; color: var(--color-primary); font-weight: 700; }
+        #timer-display { font-size: 1.2rem; color: var(--color-text-light); }
         #sentence-container { font-size: 1.5rem; color: var(--color-heading); margin: 1.5rem 0; line-height: 1.6; text-align: center; min-height: 70px; }
         #answer-input { display: block; width: 100%; max-width: 400px; margin: 0 auto 1rem auto; padding: 0.75rem 1rem; border: 2px solid #d1d5db; border-radius: 6px; font-size: 1.2rem; text-align: center; font-family: var(--font-body); transition: all 0.3s; }
         #answer-input:focus { outline: none; border-color: var(--color-primary); }
@@ -88,12 +89,14 @@
                 <div class="game-header">
                     <div id="game-controls">
                         <button id="mute-btn" title="Mute/Unmute Sounds"><i class="fas fa-volume-high"></i></button>
+                        <button id="timer-mode-btn" title="Toggle Timed Mode"><i class="fas fa-stopwatch"></i></button>
                         <div id="hint-container">
                             <button id="hint-btn">Hint</button>
                             <span id="hint-counter"></span>
                         </div>
                     </div>
                     <div id="streak-counter"></div>
+                    <div id="timer-display" class="hidden"></div>
                 </div>
                 <div class="progress-bar-container">
                     <div id="progress-bar" class="progress-bar"></div>
@@ -142,8 +145,8 @@
     </main>
 
     <div id="toast" class="toast hidden"></div>
-    <audio id="correct-sound" src="data:audio/wav;base64,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"></audio>
-    <audio id="incorrect-sound" src="data:audio/wav;base64,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"></audio>
+    <audio id="correct-sound" crossorigin="anonymous" preload="auto" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
+    <audio id="incorrect-sound" crossorigin="anonymous" preload="auto" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
 
     <footer class="footer"><!-- Footer content loaded by script.js --></footer>
 
@@ -169,7 +172,10 @@
                 { category: 'demonstrative', sentence: '___ boek hier is erg spannend. (het-woord, close by)', answer: ['dit'], tip: "For a 'het-woord' that is close by, we use 'dit'." },
                 { category: 'demonstrative', sentence: 'Zie je ___ man daar? (de-woord, far away)', answer: ['die'], tip: "For a 'de-woord' that is far away, we use 'die'." },
                 { category: 'demonstrative', sentence: '___ pen op mijn bureau is van mij. (de-woord, close by)', answer: ['deze'], tip: "For a 'de-woord' that is close by, we use 'deze'." },
-                { category: 'demonstrative', sentence: '___ huis in de verte is te koop. (het-woord, far away)', answer: ['dat'], tip: "For a 'het-woord' that is far away, we use 'dat'." }
+                { category: 'demonstrative', sentence: '___ huis in de verte is te koop. (het-woord, far away)', answer: ['dat'], tip: "For a 'het-woord' that is far away, we use 'dat'." },
+                { category: 'subject', sentence: '___ ga morgen naar de markt.', answer: ['ik'], tip: "Talking about yourself again uses 'ik'." },
+                { category: 'object', sentence: 'De leraar helpt ___.', answer: ['ons'], tip: "When the teacher helps 'us', use 'ons'." },
+                { category: 'demonstrative', sentence: 'Ken je ___ meisje daar? (het-woord, far away)', answer: ['dat'], tip: "For a 'het-woord' far away, we use 'dat'." }
             ];
 
             // --- DOM Elements ---
@@ -196,6 +202,8 @@
                 correctSound: document.getElementById('correct-sound'),
                 incorrectSound: document.getElementById('incorrect-sound'),
                 muteBtn: document.getElementById('mute-btn'),
+                timerBtn: document.getElementById('timer-mode-btn'),
+                timerDisplay: document.getElementById('timer-display'),
                 uilbertMascot: document.getElementById('uilbert-mascot'),
                 feedbackBubble: document.getElementById('feedback-bubble'),
                 feedbackMessage: document.getElementById('feedback-message'),
@@ -217,7 +225,11 @@
                 highScores: {},
                 QUESTIONS_PER_ROUND: 10,
                 UNLOCK_SCORE: 8,
-                STREAK_MILESTONE: 5
+                STREAK_MILESTONE: 5,
+                TIMER_DURATION: 15,
+                timerMode: false,
+                timeLeft: 0,
+                timerInterval: null
             };
 
             // --- Core Game Logic ---
@@ -235,7 +247,8 @@
                 elements.categorySelection.classList.add('hidden');
                 elements.completionScreen.classList.add('hidden');
                 elements.practiceArea.classList.remove('hidden');
-                
+                elements.timerDisplay.classList.toggle('hidden', !state.timerMode);
+
                 updateStreakDisplay();
                 updateHintDisplay();
                 displayQuestion();
@@ -245,6 +258,10 @@
                 resetInput();
                 updateProgressBar();
                 setUilbertExpression('neutral');
+                if (state.timerMode) {
+                    state.timeLeft = state.TIMER_DURATION;
+                    startTimer();
+                }
                 const question = state.currentSentences[state.currentQuestionIndex];
                 elements.sentenceContainer.textContent = question.sentence;
             }
@@ -252,6 +269,8 @@
             function checkAnswer() {
                 const userAnswer = elements.answerInput.value.trim().toLowerCase();
                 if (!userAnswer) return;
+
+                if (state.timerMode) stopTimer();
 
                 const question = state.currentSentences[state.currentQuestionIndex];
                 const isCorrect = question.answer.includes(userAnswer);
@@ -301,6 +320,7 @@
             }
 
             function nextQuestion() {
+                if (state.timerMode) stopTimer();
                 state.currentQuestionIndex++;
                 if (state.currentQuestionIndex < state.currentSentences.length) {
                     displayQuestion();
@@ -310,6 +330,7 @@
             }
 
             function showCompletion() {
+                if (state.timerMode) stopTimer();
                 const oldHighScore = state.highScores[state.currentCategory] || 0;
                 if (state.score > oldHighScore) {
                     state.highScores[state.currentCategory] = state.score;
@@ -332,6 +353,7 @@
                 
                 elements.practiceArea.classList.add('hidden');
                 elements.completionScreen.classList.remove('hidden');
+                elements.timerDisplay.classList.add('hidden');
                 updateUIFromState();
             }
             
@@ -373,6 +395,30 @@
                     sound.currentTime = 0;
                     sound.play();
                 }
+            }
+
+            function startTimer() {
+                clearInterval(state.timerInterval);
+                updateTimerDisplay();
+                state.timerInterval = setInterval(() => {
+                    state.timeLeft--;
+                    updateTimerDisplay();
+                    if (state.timeLeft <= 0) {
+                        clearInterval(state.timerInterval);
+                        elements.answerInput.value = '';
+                        checkAnswer();
+                    }
+                }, 1000);
+            }
+
+            function stopTimer() {
+                clearInterval(state.timerInterval);
+                state.timeLeft = 0;
+                updateTimerDisplay();
+            }
+
+            function updateTimerDisplay() {
+                elements.timerDisplay.textContent = `⏱ ${state.timeLeft}s`;
             }
 
             function triggerConfetti() {
@@ -433,6 +479,8 @@
 
                 // Update Mute Button
                 elements.muteBtn.innerHTML = `<i class="fas ${state.isMuted ? 'fa-volume-xmark' : 'fa-volume-high'}"></i>`;
+                elements.timerBtn.innerHTML = state.timerMode ? '<i class="fas fa-stopwatch"></i>' : '<i class="far fa-stopwatch"></i>';
+                elements.timerDisplay.classList.toggle('hidden', !state.timerMode);
             }
             
             function createAchievements() {
@@ -474,12 +522,24 @@
                 updateUIFromState();
             });
 
+            elements.timerBtn.addEventListener('click', () => {
+                state.timerMode = !state.timerMode;
+                if (state.timerMode) {
+                    state.timeLeft = state.TIMER_DURATION;
+                    startTimer();
+                } else {
+                    stopTimer();
+                }
+                updateUIFromState();
+            });
+
             elements.checkBtn.addEventListener('click', checkAnswer);
             elements.nextBtn.addEventListener('click', nextQuestion);
             elements.hintBtn.addEventListener('click', useHint);
             elements.playAgainBtn.addEventListener('click', () => {
                 elements.completionScreen.classList.add('hidden');
                 elements.categorySelection.classList.remove('hidden');
+                if (state.timerMode) stopTimer();
                 setUilbertExpression('neutral');
             });
             elements.answerInput.addEventListener('keydown', (e) => {
