@@ -200,8 +200,10 @@
     </main>
 
     <div id="toast" class="toast hidden"></div>
-    <audio id="correct-sound" src="https://cdn.freesound.org/previews/18/18665_6281-hq.mp3"></audio>
-    <audio id="incorrect-sound" src="https://cdn.freesound.org/previews/240/240195_2953000-hq.mp3"></audio>
+    <audio id="correct-sound"></audio>
+    <audio id="incorrect-sound"></audio>
+    <audio id="completion-sound"></audio>
+    <audio id="highscore-sound"></audio>
     <footer class="footer"></footer>
 
     <script src="script.js"></script> <!-- Your existing script for nav/footer -->
@@ -266,6 +268,8 @@
             const toast = document.getElementById('toast');
             const correctSound = document.getElementById('correct-sound');
             const incorrectSound = document.getElementById('incorrect-sound');
+            const completionSound = document.getElementById('completion-sound');
+            const highscoreSound = document.getElementById('highscore-sound');
             const startScreen = document.getElementById("start-screen");
             const startBtn = document.getElementById("start-btn");
             const soundToggle = document.getElementById('sound-toggle');
@@ -339,7 +343,7 @@
                     feedbackMessage.textContent = 'Correct! 🎉';
                     feedbackMessage.className = 'correct';
                     answerInput.classList.add('correct-answer');
-                    if (soundEnabled) correctSound.play();
+                    if (soundEnabled && correctSound.src) correctSound.play();
                     triggerConfetti();
                     score++;
                     currentStreak++;
@@ -354,7 +358,7 @@
                     feedbackMessage.textContent = message;
                     feedbackMessage.className = 'incorrect';
                     answerInput.classList.add('incorrect-answer');
-                    if (soundEnabled) incorrectSound.play();
+                    if (soundEnabled && incorrectSound.src) incorrectSound.play();
                     wrongQuestions.push(currentSentences[currentQuestionIndex]);
                     currentStreak = 0;
                 }
@@ -406,7 +410,8 @@
                 } else {
                     highScoreEl.textContent = `${highScores[currentCategory] || 0} / ${QUESTIONS_PER_ROUND}`;
                 }
-                if (score > oldHighScore && score > 0) {
+                const isNewHighScore = score > oldHighScore && score > 0 && currentCategory !== 'mistakes';
+                if (isNewHighScore) {
                     highScoreEl.innerHTML += ` <span class="new-high-score">New Best!</span>`;
                 }
 
@@ -414,6 +419,13 @@
                 practiceArea.classList.add('hidden');
                 completionScreen.classList.remove('hidden');
                 updateUIFromState();
+                if (soundEnabled) {
+                    if (isNewHighScore && highscoreSound.src) {
+                        highscoreSound.play();
+                    } else if (completionSound.src) {
+                        completionSound.play();
+                    }
+                }
             }
             
             // --- UI & Feedback ---
