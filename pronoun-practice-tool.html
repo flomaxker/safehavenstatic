@@ -87,6 +87,7 @@
 
         @media (max-width: 768px) {
             .game-field { padding: 1.5rem; }
+
             .screen { margin-bottom: 1.5rem; }
             #category-selection { flex-direction: column; }
             #category-selection .btn { width: 100%; min-width: 0; }
@@ -125,6 +126,8 @@
             </div>
             <div id="game-field" class="game-field">
             <div id='start-screen' class="screen">
+            <div id='start-screen'>
+
                 <h2><span class="emoji">🎮</span> Ready to Play?</h2>
                 <p>Welcome! Press Start to choose a category. You'll answer 10 questions per round. Type the missing word and hit Enter. Use hints if you're stuck — they reset your streak. Score 8/10 in each category to unlock Challenge Mode. Your progress saves automatically and you can toggle sounds with the speaker icon.</p>
                 <button id='start-btn' class='btn btn-primary'>Start</button>
@@ -210,8 +213,10 @@
     </main>
 
     <div id="toast" class="toast hidden"></div>
-    <audio id="correct-sound" src="https://cdn.freesound.org/previews/18/18665_6281-hq.mp3"></audio>
-    <audio id="incorrect-sound" src="https://cdn.freesound.org/previews/240/240195_2953000-hq.mp3"></audio>
+    <audio id="correct-sound"></audio>
+    <audio id="incorrect-sound"></audio>
+    <audio id="completion-sound"></audio>
+    <audio id="highscore-sound"></audio>
     <footer class="footer"></footer>
 
     <script src="script.js"></script> <!-- Your existing script for nav/footer -->
@@ -276,6 +281,8 @@
             const toast = document.getElementById('toast');
             const correctSound = document.getElementById('correct-sound');
             const incorrectSound = document.getElementById('incorrect-sound');
+            const completionSound = document.getElementById('completion-sound');
+            const highscoreSound = document.getElementById('highscore-sound');
             const startScreen = document.getElementById("start-screen");
             const startBtn = document.getElementById("start-btn");
             const soundToggle = document.getElementById('sound-toggle');
@@ -355,7 +362,7 @@
                     feedbackMessage.textContent = 'Correct! 🎉';
                     feedbackMessage.className = 'correct';
                     answerInput.classList.add('correct-answer');
-                    if (soundEnabled) correctSound.play();
+                    if (soundEnabled && correctSound.src) correctSound.play();
                     triggerConfetti();
                     score++;
                     currentStreak++;
@@ -370,7 +377,7 @@
                     feedbackMessage.textContent = message;
                     feedbackMessage.className = 'incorrect';
                     answerInput.classList.add('incorrect-answer');
-                    if (soundEnabled) incorrectSound.play();
+                    if (soundEnabled && incorrectSound.src) incorrectSound.play();
                     wrongQuestions.push(currentSentences[currentQuestionIndex]);
                     currentStreak = 0;
                 }
@@ -422,13 +429,21 @@
                 } else {
                     highScoreEl.textContent = `${highScores[currentCategory] || 0} / ${QUESTIONS_PER_ROUND}`;
                 }
-                if (score > oldHighScore && score > 0) {
+                const isNewHighScore = score > oldHighScore && score > 0 && currentCategory !== 'mistakes';
+                if (isNewHighScore) {
                     highScoreEl.innerHTML += ` <span class="new-high-score">New Best!</span>`;
                 }
 
                 practiceMistakesBtn.classList.toggle('hidden', wrongQuestions.length === 0);
                 showScreen(completionScreen);
                 updateUIFromState();
+                if (soundEnabled) {
+                    if (isNewHighScore && highscoreSound.src) {
+                        highscoreSound.play();
+                    } else if (completionSound.src) {
+                        completionSound.play();
+                    }
+                }
             }
             
             // --- UI & Feedback ---
