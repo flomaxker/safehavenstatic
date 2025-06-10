@@ -102,7 +102,7 @@ main > section.section-card > .container {
     box-shadow: var(--shadow);
     padding: 2rem;
 }
-#home { background: none; }
+#home { background: #f8f9fa; }
 #contact { color: var(--color-heading); }
 .text-center { text-align: center; }
 .text-primary { color: var(--color-primary); }
