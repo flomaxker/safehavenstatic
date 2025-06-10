@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     initializeSmoothScrolling();
     initializeScrollAnimations();
     initializeScrollProgressBar();
+    initializeUpdateBanner();
     initializeActiveNavLinkHighlighting(); // For index.html
     initializeTestimonialCarousel();
     initializeContactForm();
@@ -185,6 +186,30 @@ function initializeScrollProgressBar() {
     window.addEventListener('scroll', updateProgress);
     window.addEventListener('resize', updateProgress);
     updateProgress();
+}
+
+// --- Update Banner ---
+function initializeUpdateBanner() {
+    const banner = document.getElementById('update-banner');
+    if (!banner) return;
+
+    const closeBtn = banner.querySelector('.banner-close');
+    const root = document.documentElement;
+
+    const setOffset = () => {
+        const height = banner.offsetHeight;
+        root.style.setProperty('--banner-height', banner.style.display === 'none' ? '0px' : `${height}px`);
+    };
+
+    setOffset();
+    window.addEventListener('resize', setOffset);
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+            banner.style.display = 'none';
+            setOffset();
+        });
+    }
 }
 
 // --- Active Nav Link Highlighting on Scroll (for index.html only) ---
