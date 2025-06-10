@@ -1,6 +1,7 @@
 // Wait for the DOM to be fully loaded before running scripts
-document.addEventListener('DOMContentLoaded', () => {
-    loadFooter(); // Load the footer first
+document.addEventListener('DOMContentLoaded', async () => {
+    await loadHeader();
+    await loadFooter();
 
     // --- Call initialization functions ---
     initializeMobileNavigation();
@@ -12,6 +13,22 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeFeelingsFlags(); // For feelings-flags.html
     initializeGroningenChecklist(); // For integration-checklist.html
 });
+
+// --- Reusable Header Loader ---
+async function loadHeader() {
+    const headerElement = document.querySelector('header.header');
+    if (headerElement) {
+        try {
+            const response = await fetch('header.html');
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            const headerHtml = await response.text();
+            headerElement.outerHTML = headerHtml;
+            highlightActivePageLink();
+        } catch (error) {
+            console.error('Could not load header: ', error);
+        }
+    }
+}
 
 // --- Reusable Footer Loader ---
 async function loadFooter() {
@@ -37,6 +54,18 @@ async function loadFooter() {
             }
         }
     }
+}
+
+// --- Highlight Active Link for Sub Pages ---
+function highlightActivePageLink() {
+    const path = window.location.pathname.split('/').pop() || 'index.html';
+    if (path === '' || path === 'index.html') return;
+    document.querySelectorAll('#nav-menu .nav-link').forEach(link => {
+        const hrefPath = (link.getAttribute('href') || '').split('#')[0];
+        if (hrefPath === path) {
+            link.classList.add('active');
+        }
+    });
 }
 
 

@@ -14,90 +14,11 @@
           integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
           crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <link rel="stylesheet" href="style.css">
-    <style>
-        /* Additional style for TOS page for clarity if needed, or to override specific elements */
-        .tos-content h2 {
-            margin-top: 2.5rem;
-            margin-bottom: 1rem;
-            color: var(--color-primary);
-        }
-        .tos-content h3 {
-            margin-top: 1.8rem;
-            margin-bottom: 0.8rem;
-            color: var(--color-secondary);
-            font-size: 1.3rem; /* Adjusted from .blog-content h3 for better hierarchy */
-        }
-        .tos-content ul { /* Ensures disc bullets from .blog-content ul apply */
-            list-style: disc;
-            padding-left: 1.5rem; /* from .blog-content ul */
-            margin-left: 1rem; /* from .blog-content ul */
-        }
-        .tos-content ul li { /* from .blog-content ul li */
-            padding-left: 0;
-            margin-bottom: 0.5rem;
-        }
-        .tos-content ul li::before { /* from .blog-content ul li::before */
-            content: none;
-        }
-        .how-to-read-box {
-            background-color: var(--color-bg);
-            padding: 1.5rem 2rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
-            margin-bottom: 3rem;
-            border-left: 5px solid var(--color-secondary);
-        }
-        .how-to-read-box h2 {
-            color: var(--color-primary) !important; /* Override general .tos-content h2 */
-            margin-top: 0 !important;
-            margin-bottom: 1rem !important;
-            font-size: 1.5rem !important;
-            border-bottom: none;
-        }
-        .how-to-read-box ul {
-            list-style-type: none !important;
-            padding-left: 0 !important;
-            margin-left: 0 !important;
-        }
-        .how-to-read-box ul li {
-            padding-left: 0 !important;
-            margin-bottom: 0.5rem !important;
-        }
-        .how-to-read-box ul li::before {
-            content: none !important;
-        }
-        .tos-section-minor-heading { /* For headings like "No guarantee of specific results" */
-            font-size: 1.2rem;
-            color: var(--color-heading);
-            margin-top: 1.5rem;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-        }
-
-    </style>
+    <link rel="stylesheet" href="css/style.min.css">
+    <link rel="stylesheet" href="css/extras.min.css">
 </head>
 <body id="tos-page">
-    <header class="header">
-        <nav class="navbar container">
-            <a href="index.html" class="logo-link">
-                <img src="Safe Haven Banner (groot)-2.png" alt="Safe Haven Dutch Coaching Banner" class="logo-banner">
-            </a>
-            <ul class="nav-menu" id="nav-menu">
-                <li><a href="index.html#home" class="nav-link">Home</a></li>
-                <li><a href="index.html#about" class="nav-link">About Me</a></li>
-                <li><a href="index.html#approach" class="nav-link">Approach</a></li>
-                <li><a href="blog.html" class="nav-link">Blog</a></li>
-                <li><a href="feelings-flags.html" class="nav-link">Feelings</a></li>
-                <li><a href="integration-checklist.html" class="nav-link">Checklist</a></li>
-                <li><a href="index.html#contact" class="nav-link">Contact</a></li>
-                <!-- Consider adding a TOS link here if you want it in the main nav -->
-            </ul>
-            <button class="nav-toggle" id="nav-toggle" aria-label="Menu">
-                <i class="fas fa-bars"></i>
-            </button>
-        </nav>
-    </header>
+    <header class="header"></header>
 
     <main>
         <div class="page-container">
@@ -234,6 +155,6 @@
         <!-- Footer content will be loaded here by JavaScript -->
     </footer>
 
-    <script src="script.js"></script>
+    <script src="js/script.js"></script>
 </body>
 </html>

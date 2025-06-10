@@ -14,62 +14,11 @@
           integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
           crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <link rel="stylesheet" href="style.css">
-    <style>
-        .blog-featured-image {
-            width: 100%;
-            max-width: 700px;
-            margin: 1.5rem auto 2.5rem auto;
-            display: block;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-        .emphasized-quote { /* Kept for other potential uses, but cards will handle emphasis now */
-            display: block;
-            font-style: italic;
-            color: var(--color-text-light);
-            border-left: 3px solid var(--color-secondary);
-            padding-left: 1.5rem;
-            margin: 1.5rem 0;
-            font-size: 1.1rem;
-        }
-        /* Ensure ul inside tip-card gets default styling if needed */
-        .tip-card ul {
-            list-style: disc; /* Or your preferred list style for cards */
-            padding-left: 1.5rem; /* Adjust as needed */
-            margin-left: 0.5rem; /* Adjust as needed */
-        }
-        .tip-card ul li {
-            padding-left: 0; /* Reset any specific list item padding */
-            margin-bottom: 0.5rem;
-        }
-        .tip-card ul li::before {
-            content: none; /* Remove FontAwesome check if it applies */
-        }
-    </style>
+    <link rel="stylesheet" href="css/style.min.css">
+    <link rel="stylesheet" href="css/extras.min.css">
 </head>
 <body id="page-hidden-immigrant">
-    <header class="header">
-        <nav class="navbar container">
-             <a href="index.html" class="logo-link">
-                 <img src="Safe Haven Banner (groot)-2.png" alt="Safe Haven Dutch Coaching Banner" class="logo-banner">
-            </a>
-
-            <ul class="nav-menu" id="nav-menu">
-                <li><a href="index.html#home" class="nav-link">Home</a></li>
-                <li><a href="index.html#about" class="nav-link">About Me</a></li>
-                <li><a href="index.html#approach" class="nav-link">Approach</a></li>
-                <li><a href="blog.html" class="nav-link">Blog</a></li>
-                <li><a href="feelings-flags.html" class="nav-link">Feelings</a></li>
-                <li><a href="integration-checklist.html" class="nav-link">Checklist</a></li>
-                <li><a href="index.html#contact" class="nav-link">Contact</a></li>
-            </ul>
-
-            <button class="nav-toggle" id="nav-toggle" aria-label="Menu">
-                <i class="fas fa-bars"></i>
-            </button>
-        </nav>
-    </header>
+    <header class="header"></header>
 
     <main class="blog-post-container">
         <div class="container blog-content">
@@ -155,7 +104,7 @@
         <!-- Footer content will be loaded here by JavaScript -->
     </footer>
 
-    <script src="script.js"></script>
+    <script src="js/script.js"></script>
 
 </body>
 </html>
