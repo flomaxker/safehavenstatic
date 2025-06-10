@@ -8,7 +8,7 @@
     --color-text-light: #6b7280; /* Gray-500 */
     --color-heading: #1f2937; /* Gray-800 */
     --color-bg: #f9fafb; /* Gray-50 */
-    --color-bg-page: #f5f7fa; /* Off-white body background */
+    --color-bg-page: #f8f9fa; /* Off-white body background */
     --color-white: #ffffff;
     --font-heading: 'Poppins', sans-serif;
     --font-body: 'Open Sans', sans-serif;
@@ -20,7 +20,7 @@
     --radius-lg: 18px; /* larger rounding */
     --shadow: 0 6px 15px rgba(0,0,0,0.08);
     --shadow-hover: 0 12px 25px rgba(0,0,0,0.12);
-    --spacing-section: 5rem; /* consistent section padding */
+    --spacing-section: 7rem; /* more breathing room between sections */
     --easing-bounce: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -93,10 +93,16 @@ ul:not(.nav-menu):not(.contact-links):not(.flags-container ul):not(.coach-type u
     padding-top: var(--spacing-section);
     padding-bottom: var(--spacing-section);
 }
-section:nth-of-type(even) { background-color: var(--color-bg); }
-section:nth-of-type(odd) { background-color: var(--color-white); }
-#home { background: linear-gradient(to right, rgba(37, 99, 235, 0.85), rgba(20, 184, 166, 0.85)), url('/alexei-maridashvili-BOqK8p1pHX4-unsplash.jpg') center/cover no-repeat; } /* Ensure image path is correct */
-#contact { background-color: var(--color-primary); color: var(--color-white); }
+/* Uniform light background */
+main > section { background-color: transparent; }
+main > section.section-card > .container {
+    background-color: var(--color-white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    padding: 2rem;
+}
+#home { background: none; }
+#contact { color: var(--color-heading); }
 .text-center { text-align: center; }
 .text-primary { color: var(--color-primary); }
 .text-secondary { color: var(--color-secondary); }
@@ -147,12 +153,46 @@ section:nth-of-type(odd) { background-color: var(--color-white); }
 #update-banner a:hover { color: var(--color-primary); }
 
 /* --- Hero Section --- */
-.hero { color: var(--color-white); padding: 6rem 0; text-align: center; min-height: calc(80vh - var(--header-height)); display: flex; align-items: center; justify-content: center; }
-.hero h1 { font-size: 3rem; margin-bottom: 1rem; color: var(--color-white); font-weight: 700; }
-.hero p.tagline { font-size: 1.35rem; margin-bottom: 2rem; max-width: 750px; margin-left: auto; margin-right: auto; opacity: 0.95; font-weight: 500; }
-.hero .btn-primary { background-color: var(--color-white); color: var(--color-primary); padding: 1rem 2.5rem; font-size: 1.1rem; }
-.hero .btn-primary:hover { background-color: #f0f0f0; color: var(--color-primary); }
-.hero a[href*="members-area"] { color:var(--color-white); background:rgba(0,0,0,0.2); padding:0.5rem 1rem; border-radius:4px; display:inline-block; margin-top:1.5rem; font-size:0.9rem; }
+.hero {
+    background-color: transparent;
+    color: var(--color-heading);
+    padding: 6rem 0;
+    text-align: center;
+}
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: var(--color-heading);
+    font-weight: 700;
+}
+.hero p.tagline {
+    font-size: 1.35rem;
+    margin-bottom: 2rem;
+    max-width: 750px;
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: 500;
+    color: var(--color-text-light);
+}
+.hero .btn-primary {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    padding: 1rem 2.5rem;
+    font-size: 1.1rem;
+}
+.hero .btn-primary:hover {
+    background-color: #1d4ed8;
+    color: var(--color-white);
+}
+.hero a[href*="members-area"] {
+    color: var(--color-primary);
+    background: rgba(0,0,0,0.05);
+    padding:0.5rem 1rem;
+    border-radius:4px;
+    display:inline-block;
+    margin-top:1.5rem;
+    font-size:0.9rem;
+}
 
 
 /* --- Content Sections Layout (Generic) --- */
@@ -212,7 +252,7 @@ section:nth-of-type(odd) { background-color: var(--color-white); }
 
 
 /* --- Testimonial Carousel Styles --- */
-#testimonials { background-color: var(--color-bg); }
+#testimonials { background-color: transparent; }
 .testimonial-carousel-container { overflow: hidden; }
 .testimonial-track {
     display: flex;
@@ -269,7 +309,8 @@ section:nth-of-type(odd) { background-color: var(--color-white); }
 
 
 /* --- Contact Form Styling --- */
-#contact h2, #contact p { color: var(--color-white); }
+#contact h2 { color: var(--color-primary); }
+#contact p { color: var(--color-text); }
 #contact .contact-form { display: grid; grid-template-columns: 1fr; gap: 1rem; max-width: 600px; margin: 2rem auto 0; }
 @media (min-width: 768px) { #contact .contact-form { grid-template-columns: 1fr 1fr; } }
 #contact .contact-form input,
@@ -318,10 +359,10 @@ section:nth-of-type(odd) { background-color: var(--color-white); }
     border-color: var(--color-secondary);
     box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.25);
 }
-#form-feedback { grid-column: 1 / -1; text-align: center; margin-top: 1rem; min-height: 1.5em; color: var(--color-white); font-weight: 600; }
+#form-feedback { grid-column: 1 / -1; text-align: center; margin-top: 1rem; min-height: 1.5em; color: var(--color-primary); font-weight: 600; }
 #contact .contact-links { margin-top: 1rem; display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
-#contact .contact-links a { background-color: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.3); color: var(--color-white); padding: 0.6rem 1.2rem; border-radius: 6px; transition: background-color 0.3s ease, color 0.3s ease; display: inline-flex; align-items: center; gap: 0.5rem; }
-#contact .contact-links a:hover { background-color: var(--color-white); color: var(--color-primary); }
+#contact .contact-links a { background-color: var(--color-white); border: 1px solid #e5e7eb; color: var(--color-primary); padding: 0.6rem 1.2rem; border-radius: 6px; transition: background-color 0.3s ease, box-shadow 0.3s ease; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: var(--shadow); }
+#contact .contact-links a:hover { background-color: #f0f0f0; box-shadow: var(--shadow-hover); }
 
 /* --- Footer --- */
 .footer{background-color:var(--color-heading);color:#d1d5db;padding:2.5rem 0 1.5rem;font-size:.9rem;line-height:1.6}
