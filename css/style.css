@@ -14,6 +14,7 @@
     --font-body: 'Open Sans', sans-serif;
     --container-width: 1140px;
     --header-height: 80px;
+    --banner-height: 0px;
     --banner-bg-color: #D1E8E2; /* Light yellow for banner */
     --banner-text-color: #575757; /* Darker gray for banner text */
     --radius: 12px; /* base rounded corners */
@@ -107,7 +108,16 @@ section:nth-of-type(odd) { background-color: var(--color-white); }
 .back-link:hover { color: var(--color-primary); text-decoration: none; }
 
 /* --- Header & Navigation --- */
-.header { background-color: var(--color-white); box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); position: sticky; top: 0; left: 0; width: 100%; z-index: 1000; height: var(--header-height); }
+.header {
+    background-color: var(--color-white);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: var(--banner-height, 0);
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    height: auto;
+}
 .scroll-progress-bar {
     position: fixed;
     top: 0;
@@ -118,7 +128,12 @@ section:nth-of-type(odd) { background-color: var(--color-white); }
     z-index: 1100;
     transition: width 0.25s ease-out;
 }
-.navbar { display: flex; justify-content: space-between; align-items: center; height: 100%; }
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: var(--header-height);
+}
 .logo-banner { max-height: calc(var(--header-height) - 20px); width: auto; }
 .nav-menu { display: flex; list-style: none; gap: 1.5rem; }
 .nav-link {
@@ -137,7 +152,26 @@ section:nth-of-type(odd) { background-color: var(--color-white); }
 .nav-toggle { display: none; background: none; border: none; font-size: 1.5rem; color: var(--color-heading); cursor: pointer; }
 
 /* --- Update Banner Styles --- */
-#update-banner { background-color: var(--banner-bg-color); color: var(--banner-text-color); padding: 0.6rem 1rem; text-align: center; font-size: 0.9rem; width: 100%; border-bottom: 1px solid #e0e0e0; }
+#update-banner {
+    background-color: var(--banner-bg-color);
+    color: var(--banner-text-color);
+    padding: 0.6rem 1rem;
+    text-align: center;
+    font-size: 0.9rem;
+    width: 100%;
+    border-bottom: 1px solid #e0e0e0;
+    position: sticky;
+    top: 0;
+    z-index: 1100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#update-banner .banner-close {
+    margin-left: 0.75rem;
+    cursor: pointer;
+    font-size: 1rem;
+}
 #update-banner a { color: var(--banner-text-color); font-weight: 600; text-decoration: underline; }
 #update-banner a:hover { color: var(--color-primary); }
 
