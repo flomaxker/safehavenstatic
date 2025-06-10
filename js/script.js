@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     initializeMobileNavigation();
     initializeSmoothScrolling();
     initializeScrollAnimations();
+    initializeScrollProgressBar();
     initializeActiveNavLinkHighlighting(); // For index.html
     initializeTestimonialCarousel();
     initializeContactForm();
@@ -167,6 +168,23 @@ function initializeScrollAnimations() {
         // Fallback for browsers that don't support IntersectionObserver
         animatedElements.forEach(el => { el.classList.add('visible'); });
     }
+}
+
+// --- Scroll Progress Bar ---
+function initializeScrollProgressBar() {
+    const progressBar = document.getElementById('scroll-progress');
+    if (!progressBar) return;
+
+    const updateProgress = () => {
+        const scrollTop = window.scrollY || document.documentElement.scrollTop;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+        progressBar.style.width = progress + '%';
+    };
+
+    window.addEventListener('scroll', updateProgress);
+    window.addEventListener('resize', updateProgress);
+    updateProgress();
 }
 
 // --- Active Nav Link Highlighting on Scroll (for index.html only) ---
