@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     initializeContactForm();
     initializeFeelingsFlags(); // For feelings-flags.html
     initializeGroningenChecklist(); // For integration-checklist.html
+    initializeFAQAccordion(); // For parent FAQs on about page
 });
 
 // --- Reusable Header Loader ---
@@ -472,4 +473,18 @@ function initializeGroningenChecklist() {
         }
     });
     updateProgress(); // Initial update
+}
+
+// --- FAQ Accordion Logic (about.html) ---
+function initializeFAQAccordion() {
+    const faqCards = document.querySelectorAll('.faq-card');
+    if (!faqCards.length) return;
+
+    faqCards.forEach(card => {
+        const question = card.querySelector('.faq-question');
+        if (!question) return;
+        question.addEventListener('click', () => {
+            card.classList.toggle('open');
+        });
+    });
 }
