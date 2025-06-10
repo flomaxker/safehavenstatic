@@ -418,6 +418,15 @@ section:nth-of-type(odd) { background-color: var(--color-white); }
     font-weight: 600;
 }
 
+/* --- FAQ Section --- */
+.faq-section { max-width: 800px; margin: 2rem auto; }
+.faq-card { background-color: var(--color-bg); border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.07); margin-bottom: 1rem; overflow: hidden; }
+.faq-question { width: 100%; padding: 1rem 1.5rem; background-color: var(--color-white); font-family: var(--font-heading); font-size: 1.1rem; border: none; text-align: left; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+.faq-question .icon { transition: transform 0.3s ease; }
+.faq-answer { display: none; padding: 1rem 1.5rem; border-top: 1px solid #e5e7eb; background-color: var(--color-bg); }
+.faq-card.open .faq-answer { display: block; }
+.faq-card.open .faq-question .icon { transform: rotate(180deg); }
+
 
 /* --- Responsive Design --- */
 
