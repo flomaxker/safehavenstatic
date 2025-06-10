@@ -6,8 +6,8 @@
     max-width: 700px;
     margin: 1.5rem auto 2.5rem auto;
     display: block;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
 }
 .emphasized-quote {
     display: block;
@@ -36,10 +36,15 @@
 .game-field {
     background-color: var(--color-bg);
     padding: 2rem 2.5rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
     border-left: 5px solid var(--color-primary);
     margin-bottom: 3rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.game-field:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
 }
 #category-selection { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-bottom: 2rem; }
 #category-selection .btn { min-width: 180px; }
@@ -106,10 +111,15 @@
 .how-to-read-box {
     background-color: var(--color-bg);
     padding: 1.5rem 2rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
     margin-bottom: 3rem;
     border-left: 5px solid var(--color-secondary);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.how-to-read-box:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
 }
 .how-to-read-box h2 {
     color: var(--color-primary) !important;
