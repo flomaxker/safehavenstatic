@@ -40,7 +40,7 @@
     box-shadow: var(--shadow);
     border-left: 5px solid var(--color-primary);
     margin-bottom: 3rem;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.4s var(--easing-bounce), box-shadow 0.3s ease;
 }
 .game-field:hover {
     transform: translateY(-4px);
@@ -115,7 +115,7 @@
     box-shadow: var(--shadow);
     margin-bottom: 3rem;
     border-left: 5px solid var(--color-secondary);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.4s var(--easing-bounce), box-shadow 0.3s ease;
 }
 .how-to-read-box:hover {
     transform: translateY(-4px);

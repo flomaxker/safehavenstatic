@@ -365,8 +365,14 @@ function initializeContactForm() {
             if (data && data.success) {
                 feedback.textContent = 'Thanks for your message! I\'ll be in touch soon.';
                 feedback.style.color = 'var(--color-secondary)';
-                form.reset();
-                setTimeout(() => { feedback.textContent = ''; }, 5000);
+                form.classList.add('sent');
+                feedback.classList.add('sent');
+                setTimeout(() => {
+                    form.classList.remove('sent');
+                    feedback.classList.remove('sent');
+                    feedback.textContent = '';
+                    form.reset();
+                }, 1500);
             } else if (data && data.errors) {
                 feedback.textContent = data.errors.join(' ');
                 feedback.style.color = '#f87171';

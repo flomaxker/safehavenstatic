@@ -21,6 +21,8 @@
     --radius-lg: 18px; /* larger rounding */
     --shadow: 0 6px 15px rgba(0,0,0,0.08);
     --shadow-hover: 0 12px 25px rgba(0,0,0,0.12);
+    --spacing-section: 5rem; /* consistent section padding */
+    --easing-bounce: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* --- Basic Reset & Defaults --- */
@@ -88,7 +90,10 @@ ul:not(.nav-menu):not(.contact-links):not(.flags-container ul):not(.coach-type u
 .btn-primary:hover { background-color: #1d4ed8; color: var(--color-white); transform: translateY(-3px); box-shadow: var(--shadow-hover); }
 .btn-secondary { background-color: var(--color-secondary); color: var(--color-white); }
 .btn-secondary:hover { background-color: #0d9488; color: var(--color-white); transform: translateY(-3px); box-shadow: var(--shadow-hover); }
-.section-padding { padding-top: 5rem; padding-bottom: 5rem; }
+.section-padding {
+    padding-top: var(--spacing-section);
+    padding-bottom: var(--spacing-section);
+}
 section:nth-of-type(even) { background-color: var(--color-bg); }
 section:nth-of-type(odd) { background-color: var(--color-white); }
 #home { background: linear-gradient(to right, rgba(37, 99, 235, 0.85), rgba(20, 184, 166, 0.85)), url('/alexei-maridashvili-BOqK8p1pHX4-unsplash.jpg') center/cover no-repeat; } /* Ensure image path is correct */
@@ -243,7 +248,12 @@ section:nth-of-type(odd) { background-color: var(--color-white); }
 /* --- Testimonial Carousel Styles --- */
 #testimonials { background-color: var(--color-bg); }
 .testimonial-carousel-container { overflow: hidden; }
-.testimonial-track { display: flex; transition: transform 0.5s ease-in-out; padding: 0 1rem; gap: 2rem; }
+.testimonial-track {
+    display: flex;
+    transition: transform 0.6s var(--easing-bounce);
+    padding: 0 1rem;
+    gap: 2rem;
+}
 .testimonial-card {
     flex: 0 0 100%;
     padding: 2rem;
@@ -325,6 +335,15 @@ section:nth-of-type(odd) { background-color: var(--color-white); }
     border-color: #0d9488;
     box-shadow: var(--shadow-hover);
     transform: translateY(-3px);
+}
+#contact .contact-form.sent button {
+    animation: pulse 0.6s var(--easing-bounce);
+}
+#contact .contact-form.sent button:disabled {
+    opacity: 0.7;
+}
+#form-feedback.sent {
+    animation: pulse 0.6s var(--easing-bounce);
 }
 #contact .contact-form input::placeholder, #contact .contact-form textarea::placeholder { color: var(--color-text-light); opacity: 1; }
 #contact .contact-form input:focus,
@@ -445,11 +464,11 @@ section:nth-of-type(odd) { background-color: var(--color-white); }
     overflow:hidden;
     display:grid;
     grid-template-columns:1fr;
-    transition:transform .3s ease,box-shadow .3s ease;
+    transition:transform .4s var(--easing-bounce),box-shadow .3s ease;
     border:1px solid #e5e7eb
 }
 .blog-preview-card:hover{
-    transform:translateY(-5px);
+    transform:translateY(-5px) scale(1.02);
     box-shadow:var(--shadow-hover)
 }
 .preview-image{width:100%;aspect-ratio:16 / 10;overflow:hidden;border-bottom:1px solid #e5e7eb}
@@ -638,8 +657,18 @@ section:nth-of-type(odd) { background-color: var(--color-white); }
 }
 .faq-question { width: 100%; padding: 1rem 1.5rem; background-color: var(--color-white); font-family: var(--font-heading); font-size: 1.1rem; border: none; text-align: left; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
 .faq-question .icon { transition: transform 0.3s ease; }
-.faq-answer { display: none; padding: 1rem 1.5rem; border-top: 1px solid #e5e7eb; background-color: var(--color-bg); }
-.faq-card.open .faq-answer { display: block; }
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    padding: 0 1.5rem;
+    border-top: 1px solid #e5e7eb;
+    background-color: var(--color-bg);
+    transition: max-height 0.4s var(--easing-bounce), padding 0.4s var(--easing-bounce);
+}
+.faq-card.open .faq-answer {
+    max-height: 500px;
+    padding: 1rem 1.5rem;
+}
 .faq-card.open .faq-question .icon { transform: rotate(180deg); }
 
 
@@ -745,4 +774,11 @@ section:nth-of-type(odd) { background-color: var(--color-white); }
     }
     .preview-text { padding: 1.5rem; }
     .coach-comparison-container { padding: 1.5rem; }
+}
+
+/* --- Micro-interaction Animations --- */
+@keyframes pulse {
+    0% { transform: scale(1); box-shadow: var(--shadow); }
+    50% { transform: scale(1.03); box-shadow: var(--shadow-hover); }
+    100% { transform: scale(1); box-shadow: var(--shadow); }
 }
