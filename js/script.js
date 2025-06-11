@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     initializeFeelingsFlags(); // For feelings-flags.html
     initializeGroningenChecklist(); // For integration-checklist.html
     initializeFAQAccordion(); // For parent FAQs on about page
+    initializeImageConnectors(); // Draw playful lines between images
 });
 
 // --- Reusable Header Loader ---
@@ -548,4 +549,45 @@ function initializeFAQAccordion() {
             card.classList.toggle('open');
         });
     });
+}
+
+// --- Image Connector Lines ---
+function initializeImageConnectors() {
+    const svg = document.getElementById('image-connectors');
+    const images = document.querySelectorAll('.content-image img');
+    if (!svg || images.length < 2) return;
+
+    const draw = () => {
+        svg.setAttribute('height', document.body.scrollHeight);
+        svg.innerHTML = '';
+
+        images.forEach((img, index) => {
+            if (index === images.length - 1) return;
+            const startRect = img.getBoundingClientRect();
+            const endRect = images[index + 1].getBoundingClientRect();
+
+            const startX = startRect.left + startRect.width / 2 + window.scrollX;
+            const startY = startRect.bottom + window.scrollY;
+            const endX = endRect.left + endRect.width / 2 + window.scrollX;
+            const endY = endRect.top + window.scrollY;
+
+            const midY = startY + (endY - startY) / 2;
+
+            let d;
+            if (index % 2 === 0) {
+                d = `M ${startX} ${startY} V ${midY} H ${endX} V ${endY}`;
+            } else {
+                const midX = (startX + endX) / 2;
+                d = `M ${startX} ${startY} V ${midY - 30} H ${midX} V ${midY + 30} H ${endX} V ${endY}`;
+            }
+
+            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            path.setAttribute('d', d);
+            path.setAttribute('class', 'connector-line');
+            svg.appendChild(path);
+        });
+    };
+
+    draw();
+    window.addEventListener('resize', draw);
 }
