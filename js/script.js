@@ -608,7 +608,7 @@ function initializeImageConnectors() {
     };
     // Expose draw function globally so other scripts can trigger a redraw
     window.drawImageConnectors = draw;
-
+  
     const readiness = Array.from(images, img => ({
         loaded: img.complete,
         animated: img.closest('.content-image')?.classList.contains('visible') || false
