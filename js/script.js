@@ -162,6 +162,9 @@ function initializeScrollAnimations() {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
                     observer.unobserve(entry.target);
+                    if (typeof window.drawImageConnectors === 'function') {
+                        window.drawImageConnectors();
+                    }
                 }
             });
         }, { threshold: 0 });
@@ -169,6 +172,9 @@ function initializeScrollAnimations() {
         animatedElements.forEach(el => {
             if (isElementInViewport(el)) {
                 el.classList.add('visible');
+                if (typeof window.drawImageConnectors === 'function') {
+                    window.drawImageConnectors();
+                }
             } else {
                 observer.observe(el);
             }
@@ -176,6 +182,9 @@ function initializeScrollAnimations() {
     } else {
         // Fallback for browsers that don't support IntersectionObserver
         animatedElements.forEach(el => { el.classList.add('visible'); });
+        if (typeof window.drawImageConnectors === 'function') {
+            window.drawImageConnectors();
+        }
     }
 }
 
@@ -557,6 +566,7 @@ function initializeImageConnectors() {
     const images = document.querySelectorAll('.content-image img');
     if (!svg || images.length < 2) return;
 
+    const radius = 20;
     const draw = () => {
         svg.setAttribute('height', document.body.scrollHeight);
         svg.innerHTML = '';
@@ -575,10 +585,28 @@ function initializeImageConnectors() {
 
             let d;
             if (index % 2 === 0) {
-                d = `M ${startX} ${startY} V ${midY} H ${endX} V ${endY}`;
+                const dir = endX > startX ? 1 : -1;
+                d = `M ${startX} ${startY} L ${startX} ${midY - radius}` +
+                    ` Q ${startX} ${midY} ${startX + dir * radius} ${midY}` +
+                    ` L ${endX - dir * radius} ${midY}` +
+                    ` Q ${endX} ${midY} ${endX} ${midY + radius}` +
+                    ` L ${endX} ${endY}`;
             } else {
+                const offset = 30;
                 const midX = (startX + endX) / 2;
-                d = `M ${startX} ${startY} V ${midY - 30} H ${midX} V ${midY + 30} H ${endX} V ${endY}`;
+                const dir1 = midX > startX ? 1 : -1;
+                const dir2 = endX > midX ? 1 : -1;
+                d =
+                    `M ${startX} ${startY}` +
+                    ` L ${startX} ${midY - offset - radius}` +
+                    ` Q ${startX} ${midY - offset} ${startX + dir1 * radius} ${midY - offset}` +
+                    ` L ${midX - dir1 * radius} ${midY - offset}` +
+                    ` Q ${midX} ${midY - offset} ${midX} ${midY - offset + radius}` +
+                    ` L ${midX} ${midY + offset - radius}` +
+                    ` Q ${midX} ${midY + offset} ${midX + dir2 * radius} ${midY + offset}` +
+                    ` L ${endX - dir2 * radius} ${midY + offset}` +
+                    ` Q ${endX} ${midY + offset} ${endX} ${midY + offset + radius}` +
+                    ` L ${endX} ${endY}`;
             }
 
             const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
@@ -587,7 +615,20 @@ function initializeImageConnectors() {
             svg.appendChild(path);
         });
     };
+    // Expose draw function globally so other scripts can trigger a redraw
+    window.drawImageConnectors = draw;
 
     draw();
+    // Recalculate once all assets like fonts/images have loaded
+    window.addEventListener('load', draw);
     window.addEventListener('resize', draw);
+    let scrollScheduled = false;
+    window.addEventListener('scroll', () => {
+        if (scrollScheduled) return;
+        scrollScheduled = true;
+        requestAnimationFrame(() => {
+            draw();
+            scrollScheduled = false;
+        });
+    });
 }
