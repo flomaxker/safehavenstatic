@@ -163,12 +163,24 @@ function initializeScrollAnimations() {
                     observer.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.1 });
-        animatedElements.forEach(el => { observer.observe(el); });
+        }, { threshold: 0 });
+
+        animatedElements.forEach(el => {
+            if (isElementInViewport(el)) {
+                el.classList.add('visible');
+            } else {
+                observer.observe(el);
+            }
+        });
     } else {
         // Fallback for browsers that don't support IntersectionObserver
         animatedElements.forEach(el => { el.classList.add('visible'); });
     }
+}
+
+function isElementInViewport(el) {
+    const rect = el.getBoundingClientRect();
+    return rect.bottom >= 0 && rect.top <= (window.innerHeight || document.documentElement.clientHeight);
 }
 
 // --- Scroll Progress Bar ---
