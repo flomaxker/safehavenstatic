@@ -817,6 +817,11 @@ main > section.section-card > .container {
     .coach-comparison-container { padding: 1.5rem; }
 }
 
+/* --- About Page Specific Styles --- */
+#page-about .content-image img {
+    width: 70%;
+}
+
 /* --- Micro-interaction Animations --- */
 @keyframes pulse {
     0% { transform: scale(1); box-shadow: var(--shadow); }
