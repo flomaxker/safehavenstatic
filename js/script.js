@@ -162,6 +162,9 @@ function initializeScrollAnimations() {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
                     observer.unobserve(entry.target);
+                    if (typeof window.drawImageConnectors === 'function') {
+                        window.drawImageConnectors();
+                    }
                 }
             });
         }, { threshold: 0 });
@@ -169,6 +172,9 @@ function initializeScrollAnimations() {
         animatedElements.forEach(el => {
             if (isElementInViewport(el)) {
                 el.classList.add('visible');
+                if (typeof window.drawImageConnectors === 'function') {
+                    window.drawImageConnectors();
+                }
             } else {
                 observer.observe(el);
             }
@@ -176,6 +182,9 @@ function initializeScrollAnimations() {
     } else {
         // Fallback for browsers that don't support IntersectionObserver
         animatedElements.forEach(el => { el.classList.add('visible'); });
+        if (typeof window.drawImageConnectors === 'function') {
+            window.drawImageConnectors();
+        }
     }
 }
 
@@ -609,21 +618,9 @@ function initializeImageConnectors() {
     // Expose draw function globally so other scripts can trigger a redraw
     window.drawImageConnectors = draw;
 
-    images.forEach(img => {
-        const container = img.closest('.content-image');
-        if (container) {
-            container.addEventListener('transitionend', (e) => {
-                if (e.propertyName === 'transform') {
-                    draw();
-                }
-            }, { once: true });
-        }
-    });
-
+    draw();
     // Recalculate once all assets like fonts/images have loaded
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        window.addEventListener('load', draw);
-    }
+    window.addEventListener('load', draw);
     window.addEventListener('resize', draw);
     let scrollScheduled = false;
     window.addEventListener('scroll', () => {
