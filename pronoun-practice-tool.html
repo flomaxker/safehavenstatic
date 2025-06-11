@@ -762,6 +762,13 @@
                 }
             });
 
+            // Mobile-friendly tooltips for achievements
+            document.querySelectorAll('.badge[data-tooltip]').forEach(badge => {
+                badge.addEventListener('click', () => {
+                    badge.classList.add('show-tooltip');
+                    setTimeout(() => badge.classList.remove('show-tooltip'), 2000);
+                });
+            });
             initialize();
         });
     </script>
