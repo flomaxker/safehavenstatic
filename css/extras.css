@@ -134,4 +134,12 @@
 }
 .how-to-read-box li {
     margin-bottom: 0.5rem;
+
+@media (max-width: 768px) {
+    #tos-page .blog-content,
+    #privacy-policy-page .blog-content {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
 }
+
