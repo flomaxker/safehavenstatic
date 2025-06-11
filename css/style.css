@@ -842,7 +842,7 @@ body {
 
 .connector-line {
     stroke: #f7b787;
-    stroke-width: 15;
+    stroke-width: 12;
     fill: none;
     /* Use flat line ends so the connectors stay hidden beneath images */
     stroke-linecap: butt;
