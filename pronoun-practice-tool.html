@@ -692,6 +692,11 @@
                 }
                 return array;
             }
+
+            // Capitalize first letter of a category for toast messages
+            function capitalize(str) {
+                return str ? str.charAt(0).toUpperCase() + str.slice(1) : '';
+            }
             
             // --- Initial Setup & Event Listeners ---
             function updateSoundIcon() {

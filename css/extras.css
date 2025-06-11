@@ -135,3 +135,20 @@
 .how-to-read-box li {
     margin-bottom: 0.5rem;
 }
+
+/* Pronoun Game completion indicator */
+.category-btn { position: relative; }
+.category-btn.completed {
+    background-color: var(--color-success);
+    color: var(--color-white);
+}
+.category-btn.completed::after {
+    content: '\f058';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2rem;
+}
