@@ -608,53 +608,22 @@ function initializeImageConnectors() {
     };
     // Expose draw function globally so other scripts can trigger a redraw
     window.drawImageConnectors = draw;
-  
-    const readiness = Array.from(images, img => ({
-        loaded: img.complete,
-        animated: img.closest('.content-image')?.classList.contains('visible') || false
-    }));
 
-    const checkAndDraw = (index) => {
-        if (index === 0) return; // First image has no preceding connector
-        const state = readiness[index];
-        if (state.loaded && state.animated) {
-            draw();
-        }
-    };
-
-    images.forEach((img, index) => {
+    images.forEach(img => {
         const container = img.closest('.content-image');
-        if (!container) return;
-
-        if (!readiness[index].loaded) {
-            img.addEventListener('load', () => {
-                readiness[index].loaded = true;
-                checkAndDraw(index);
-            }, { once: true });
-        }
-
-        if (!readiness[index].animated) {
+        if (container) {
             container.addEventListener('transitionend', (e) => {
                 if (e.propertyName === 'transform') {
-                    readiness[index].animated = true;
-                    checkAndDraw(index);
+                    draw();
                 }
             }, { once: true });
-
-            if (container.classList.contains('visible')) {
-                readiness[index].animated = true;
-                checkAndDraw(index);
-            }
-        } else {
-            checkAndDraw(index);
         }
     });
 
-    // Final draw after all images and animations (fallback)
-    window.addEventListener('load', () => {
-        draw();
-    });
-    // Recalculate once assets like fonts/images have loaded for reduced motion
+    // Recalculate once all assets like fonts/images have loaded
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        window.addEventListener('load', draw);
+    }
     window.addEventListener('resize', draw);
     let scrollScheduled = false;
     window.addEventListener('scroll', () => {
