@@ -564,11 +564,6 @@ function initializeImageConnectors() {
 
         images.forEach((img, index) => {
             if (index === images.length - 1) return;
-
-            if (!readiness[index].loaded || !readiness[index + 1].loaded || !readiness[index + 1].animated) {
-                return;
-            }
-
             const startRect = img.getBoundingClientRect();
             const endRect = images[index + 1].getBoundingClientRect();
 
@@ -613,27 +608,26 @@ function initializeImageConnectors() {
     };
     // Expose draw function globally so other scripts can trigger a redraw
     window.drawImageConnectors = draw;
-        animated: false
-        if (index === 0) return;
-        if (img.complete) {
-            readiness[index].loaded = true;
-        } else {
-                if (index > 0) checkAndDraw(index);
-        const markAnimated = () => {
-            readiness[index].animated = true;
-            if (index > 0) checkAndDraw(index);
-        };
-        if (container.classList.contains('visible')) {
-            if (getComputedStyle(container).transform === 'none') {
-                markAnimated();
-            } else {
-                container.addEventListener('transitionend', (e) => {
-                    if (e.propertyName === 'transform') markAnimated();
-                }, { once: true });
-            container.addEventListener('transitionend', (e) => {
-                if (e.propertyName === 'transform') markAnimated();
-            }, { once: true });
-    // Redraw on resize or scroll
+  
+    const readiness = Array.from(images, img => ({
+        loaded: img.complete,
+        animated: img.closest('.content-image')?.classList.contains('visible') || false
+    }));
+
+    const checkAndDraw = (index) => {
+        if (index === 0) return; // First image has no preceding connector
+        const state = readiness[index];
+        if (state.loaded && state.animated) {
+            draw();
+        }
+    };
+
+    images.forEach((img, index) => {
+        const container = img.closest('.content-image');
+        if (!container) return;
+
+        if (!readiness[index].loaded) {
+            img.addEventListener('load', () => {
                 readiness[index].loaded = true;
                 checkAndDraw(index);
             }, { once: true });
