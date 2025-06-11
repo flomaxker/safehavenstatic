@@ -162,9 +162,6 @@ function initializeScrollAnimations() {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
                     observer.unobserve(entry.target);
-                    if (typeof window.drawImageConnectors === 'function') {
-                        window.drawImageConnectors();
-                    }
                 }
             });
         }, { threshold: 0 });
@@ -172,9 +169,6 @@ function initializeScrollAnimations() {
         animatedElements.forEach(el => {
             if (isElementInViewport(el)) {
                 el.classList.add('visible');
-                if (typeof window.drawImageConnectors === 'function') {
-                    window.drawImageConnectors();
-                }
             } else {
                 observer.observe(el);
             }
@@ -182,9 +176,6 @@ function initializeScrollAnimations() {
     } else {
         // Fallback for browsers that don't support IntersectionObserver
         animatedElements.forEach(el => { el.classList.add('visible'); });
-        if (typeof window.drawImageConnectors === 'function') {
-            window.drawImageConnectors();
-        }
     }
 }
 
@@ -618,9 +609,52 @@ function initializeImageConnectors() {
     // Expose draw function globally so other scripts can trigger a redraw
     window.drawImageConnectors = draw;
 
-    draw();
-    // Recalculate once all assets like fonts/images have loaded
-    window.addEventListener('load', draw);
+    const readiness = Array.from(images, img => ({
+        loaded: img.complete,
+        animated: img.closest('.content-image')?.classList.contains('visible') || false
+    }));
+
+    const checkAndDraw = (index) => {
+        if (index === 0) return; // First image has no preceding connector
+        const state = readiness[index];
+        if (state.loaded && state.animated) {
+            draw();
+        }
+    };
+
+    images.forEach((img, index) => {
+        const container = img.closest('.content-image');
+        if (!container) return;
+
+        if (!readiness[index].loaded) {
+            img.addEventListener('load', () => {
+                readiness[index].loaded = true;
+                checkAndDraw(index);
+            }, { once: true });
+        }
+
+        if (!readiness[index].animated) {
+            container.addEventListener('transitionend', (e) => {
+                if (e.propertyName === 'transform') {
+                    readiness[index].animated = true;
+                    checkAndDraw(index);
+                }
+            }, { once: true });
+
+            if (container.classList.contains('visible')) {
+                readiness[index].animated = true;
+                checkAndDraw(index);
+            }
+        } else {
+            checkAndDraw(index);
+        }
+    });
+
+    // Final draw after all images and animations (fallback)
+    window.addEventListener('load', () => {
+        draw();
+    });
+    // Recalculate once assets like fonts/images have loaded for reduced motion
     window.addEventListener('resize', draw);
     let scrollScheduled = false;
     window.addEventListener('scroll', () => {
