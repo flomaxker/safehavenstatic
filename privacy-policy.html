@@ -28,13 +28,10 @@
 
     <main>
         <div class="page-container">
-            <div class="container slide-up">
+            <div class="container slide-up visible">
                 <div class="blog-content tos-content">
-<h1 id="privacy-policy-for-safe-haven-dutch-coaching">Privacy Policy for
-Safe Haven Dutch Coaching</h1>
-<p><strong>Effective Date:</strong> 10 June 2025 <strong>Last
-Updated:</strong> 10 June 2025 <strong>Website:</strong>
-https://www.safehavendutch.nl</p>
+<h1>Safe Haven Dutch Coaching – Privacy Policy</h1>
+<p class="text-light" style="font-size: 0.9rem; margin-top: -0.8rem; margin-bottom: 2.5rem;">Effective: 1 July 2025 —— Last updated: 11 June 2025</p>
 <h2 id="plain-language-summary">Plain-Language Summary</h2>
 <p>I care deeply about each student’s privacy. This policy explains:</p>
 <ol type="1">
@@ -416,6 +413,14 @@ and respect.</p>
         <!-- Footer content will be loaded here by JavaScript -->
     </footer>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.querySelector('#privacy-policy-page .container.slide-up');
+            if (container) {
+                container.classList.add('visible');
+            }
+        });
+    </script>
     <script src="js/script.js"></script>
 </body>
 </html>
