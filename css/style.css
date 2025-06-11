@@ -844,7 +844,8 @@ body {
     stroke: #f7b787;
     stroke-width: 12;
     fill: none;
-    stroke-linecap: round;
+    /* Use flat line ends so the connectors stay hidden beneath images */
+    stroke-linecap: butt;
     stroke-linejoin: round;
     opacity: 0.7;
     animation: connector-drift 18s ease-in-out infinite alternate;
