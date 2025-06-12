@@ -768,12 +768,12 @@ main > section.section-card > .container {
     #selected-feeling-display h3 { font-size: 1.6rem; }
     #selected-feeling-display #display-child-message, #selected-feeling-display .dutch-phrase { font-size: 1rem; }
     #selected-feeling-display #display-parent-tip p { font-size: 0.9rem; }
-     .flashcard-grid {
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    .flashcard-grid {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
         gap: 1rem;
     }
     .flashcard-card {
-        height: 160px;
+        height: 220px;
     }
     .flashcard-face {
         padding: 1rem;
