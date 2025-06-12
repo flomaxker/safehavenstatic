@@ -772,6 +772,9 @@
 
             // Mobile-friendly tooltips for achievements
             document.querySelectorAll('.badge[data-tooltip]').forEach(badge => {
+                // Ensure a native browser tooltip appears on hover
+                const tip = badge.getAttribute('data-tooltip');
+                if (tip) badge.setAttribute('title', tip);
                 badge.addEventListener('click', () => {
                     badge.classList.add('show-tooltip');
                     setTimeout(() => badge.classList.remove('show-tooltip'), 2000);
