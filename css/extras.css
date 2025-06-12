@@ -79,7 +79,7 @@
 #timer-bar { height: 100%; width: 100%; background-color: var(--color-accent); transition: width 1s linear; }
 #timer-text { position: absolute; width: 100%; text-align: center; line-height: 20px; color: var(--color-white); font-weight: 600; top: 0; left: 0; pointer-events: none; }
 #achievements-container { margin: 3rem auto; max-width: 600px; text-align: center; }
-#achievements-container h3 { color: var(--color-secondary); }
+#achievements-container h3 { color: var(--color-primary); }
 .badge-grid { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; margin-top: 1.5rem; }
 .badge { width: 100px; text-align: center; }
 .badge .icon { font-size: 3rem; border-radius: 50%; width: 70px; height: 70px; line-height: 70px; margin: 0 auto; transition: all 0.4s ease; }
@@ -117,7 +117,7 @@
 .tos-content h3 {
     margin-top: 1.8rem;
     margin-bottom: 0.8rem;
-    color: var(--color-secondary);
+    color: var(--color-primary);
     font-size: 1.3rem;
 }
 .tos-content ul {
