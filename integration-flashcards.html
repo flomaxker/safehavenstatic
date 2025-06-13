@@ -334,7 +334,7 @@
                 flashcards.forEach((card, idx) => {
                     card.classList.toggle('active', idx === currentIndex);
                 });
-                flashcards[currentIndex].scrollIntoView({ behavior: 'smooth', inline: 'center' });
+                flashcards[currentIndex].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
             }
 
             prevBtn.addEventListener('click', () => {

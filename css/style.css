@@ -451,6 +451,7 @@ main > section.section-card > .container {
     margin-top: 2rem;
     margin-bottom: 3rem;
     overflow-x: auto;
+    overflow-y: hidden;
     scroll-behavior: smooth;
     padding-bottom: 1rem;
 }
