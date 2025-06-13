@@ -472,6 +472,9 @@ main > section.section-card > .container {
     transform: scale(1.05);
     box-shadow: var(--shadow-hover);
 }
+.flashcard-card.flipped.active {
+    transform: rotateY(180deg) scale(1.05);
+}
 .flashcard-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 8px; display: flex; align-items: center; justify-content: center; text-align: center; padding: 1.5rem; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08); overflow: hidden; box-sizing: border-box; transition: box-shadow 0.8s ease; }
 .flashcard-front { background-color: var(--color-white); color: var(--color-primary); font-family: var(--font-heading); font-size: 1.1em; font-weight: 500; z-index: 2; transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; }
 .flashcard-card:not(.flipped) .flashcard-front:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(0, 0, 0, 0.12); }
