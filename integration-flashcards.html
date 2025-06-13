@@ -36,8 +36,10 @@
 
                     <p class="intro-text">Moving to a new country, especially the Netherlands, comes with unique questions and challenges for expat families. These flashcards cover common issues Third Culture Kids (TCKs) and their parents might face when integrating in Groningen. Click on a card to reveal a helpful tip or starting point.</p>
 
-                    <div class="flashcard-grid">
-                        <!-- Each div.flashcard-card represents a flippable card -->
+                    <div class="flashcard-carousel">
+                        <button class="carousel-btn prev" aria-label="Previous card"><i class="fas fa-chevron-left"></i></button>
+                        <div class="flashcard-grid">
+                            <!-- Each div.flashcard-card represents a flippable card -->
 
                         <div class="flashcard-card">
                             <div class="flashcard-face flashcard-front">
@@ -260,6 +262,8 @@
                         </div>
                         <!-- Add all other flashcard cards here following the pattern -->
 
+                        </div>
+                        <button class="carousel-btn next" aria-label="Next card"><i class="fas fa-chevron-right"></i></button>
                     </div>
 
                 </div>
@@ -318,6 +322,32 @@
                     event.stopPropagation();
                 });
             });
+
+            // --- Flashcard Carousel Navigation ---
+            const flashcardContainer = document.querySelector('.flashcard-grid');
+            const flashcards = document.querySelectorAll('.flashcard-card');
+            const prevBtn = document.querySelector('.carousel-btn.prev');
+            const nextBtn = document.querySelector('.carousel-btn.next');
+            let currentIndex = 0;
+
+            function updateCarousel() {
+                flashcards.forEach((card, idx) => {
+                    card.classList.toggle('active', idx === currentIndex);
+                });
+                flashcards[currentIndex].scrollIntoView({ behavior: 'smooth', inline: 'center' });
+            }
+
+            prevBtn.addEventListener('click', () => {
+                currentIndex = (currentIndex - 1 + flashcards.length) % flashcards.length;
+                updateCarousel();
+            });
+
+            nextBtn.addEventListener('click', () => {
+                currentIndex = (currentIndex + 1) % flashcards.length;
+                updateCarousel();
+            });
+
+            updateCarousel();
 
             // --- Other page-specific JS (or elements from global script that are needed) ---
 
