@@ -319,6 +319,30 @@
                 });
             });
 
+            // --- Automatic Horizontal Scrolling for Flashcards ---
+            const flashcardContainer = document.querySelector('.flashcard-grid');
+            let autoScrollId;
+
+            function startAutoScroll() {
+                autoScrollId = setInterval(() => {
+                    if (flashcardContainer.scrollLeft + flashcardContainer.clientWidth >= flashcardContainer.scrollWidth) {
+                        flashcardContainer.scrollLeft = 0;
+                    } else {
+                        flashcardContainer.scrollLeft += 0.5;
+                    }
+                }, 20);
+            }
+
+            function stopAutoScroll() {
+                clearInterval(autoScrollId);
+            }
+
+            flashcardContainer.addEventListener('mouseenter', stopAutoScroll);
+            flashcardContainer.addEventListener('mouseleave', startAutoScroll);
+            flashcardContainer.addEventListener('touchstart', stopAutoScroll, { passive: true });
+            flashcardContainer.addEventListener('touchend', startAutoScroll);
+            startAutoScroll();
+
             // --- Other page-specific JS (or elements from global script that are needed) ---
 
              // --- Dynamic Year in Footer (can be here or in global script) ---
