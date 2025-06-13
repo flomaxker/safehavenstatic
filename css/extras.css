@@ -169,6 +169,27 @@
     margin-bottom: 0.5rem;
 }
 
+.policy-divider {
+    margin: 3rem 0 2rem;
+}
+
+.policy-closing {
+    text-align: center;
+}
+
+.policy-closing p {
+    font-size: 1.1rem;
+}
+
+.policy-closing p:first-child {
+    margin-bottom: 0.5rem;
+}
+
+.policy-closing p:last-child {
+    margin-bottom: 1.5rem;
+}
+
+
 @media (max-width: 768px) {
     #tos-page .blog-content,
     #privacy-policy-page .blog-content {
