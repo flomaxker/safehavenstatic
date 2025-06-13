@@ -1,8 +1,5 @@
 'use strict';
-// Determine relative path prefix when pages are in subfolders
-function getRootPrefix() {
-    return window.location.pathname.includes('/blog/') ? '../' : '';
-}
+
 // Wait for the DOM to be fully loaded before running scripts
 document.addEventListener('DOMContentLoaded', async () => {
     await loadHeader();
@@ -27,7 +24,7 @@ async function loadHeader() {
     const headerElement = document.querySelector('header.header');
     if (headerElement) {
         try {
-            const response = await fetch(getRootPrefix() + 'header.html');
+            const response = await fetch('/header.html');
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             const headerHtml = await response.text();
             headerElement.outerHTML = headerHtml;
@@ -43,7 +40,7 @@ async function loadFooter() {
     const footerElement = document.querySelector('footer.footer');
     if (footerElement) {
         try {
-            const response = await fetch(getRootPrefix() + 'footer.html');
+            const response = await fetch('/footer.html');
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
