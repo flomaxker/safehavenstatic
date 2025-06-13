@@ -132,38 +132,51 @@
 .tos-content ul li::before {
     content: none;
 }
-.how-to-read-box {
+.how-to-read-box,
+.policy-menu-box {
     background-color: var(--color-bg);
-    padding: 1.5rem 2rem;
+    padding: 2rem 2.5rem;
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow);
     margin-bottom: 3rem;
     border-left: 5px solid var(--color-secondary);
     transition: transform 0.4s var(--easing-bounce), box-shadow 0.3s ease;
 }
-.how-to-read-box:hover {
+.how-to-read-box:hover,
+.policy-menu-box:hover {
     transform: translateY(-4px);
     box-shadow: var(--shadow-hover);
 }
-.how-to-read-box h2 {
+.how-to-read-box h2,
+.policy-menu-box h2 {
     color: var(--color-primary) !important;
     margin-top: 0 !important;
     margin-bottom: 1rem !important;
     font-size: 1.5rem !important;
     border-bottom: none;
 }
-.how-to-read-box ul {
+.how-to-read-box ul,
+.policy-menu-box ul {
     list-style-type: none !important;
     padding-left: 0 !important;
 }
-.how-to-read-box li {
+.how-to-read-box li,
+.policy-menu-box li {
     margin-bottom: 0.5rem;
+}
 
 @media (max-width: 768px) {
     #tos-page .blog-content,
     #privacy-policy-page .blog-content {
         padding-left: 1rem;
         padding-right: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .how-to-read-box,
+    .policy-menu-box {
+        padding: 1.5rem;
     }
 }
 
