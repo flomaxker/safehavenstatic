@@ -328,7 +328,7 @@
             const flashcards = document.querySelectorAll('.flashcard-card');
             const prevBtn = document.querySelector('.carousel-btn.prev');
             const nextBtn = document.querySelector('.carousel-btn.next');
-            let currentIndex = 0;
+            let currentIndex = flashcards.length > 1 ? 1 : 0; // Start with middle card active
 
             function updateCarousel() {
                 flashcards.forEach((card, idx) => {
