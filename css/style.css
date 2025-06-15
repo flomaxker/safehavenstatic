@@ -858,3 +858,20 @@ main > section.section-card > .container {
     50% { transform: scale(1.03); box-shadow: var(--shadow-hover); }
     100% { transform: scale(1); box-shadow: var(--shadow); }
 }
+
+/* Copy button on flashcard backs */
+.flashcard-back .copy-btn {
+    margin-top: 0.75rem;
+    align-self: flex-end;
+    background-color: var(--color-secondary);
+    color: var(--color-white);
+    border: none;
+    padding: 0.35rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.8em;
+    cursor: pointer;
+}
+.flashcard-back .copy-btn.copied {
+    background-color: var(--color-success);
+}
+
