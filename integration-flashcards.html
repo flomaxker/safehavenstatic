@@ -352,8 +352,14 @@
 
             flashcardCards.forEach(card => {
                 card.addEventListener('click', () => {
-                    // Toggle the 'flipped' class on the clicked card
-                    card.classList.toggle('flipped');
+                    const clickedIndex = Array.from(flashcardCards).indexOf(card);
+                    if (!card.classList.contains('active')) {
+                        currentIndex = clickedIndex;
+                        updateCarousel();
+                    } else {
+                        // Toggle the 'flipped' class only when the card is active
+                        card.classList.toggle('flipped');
+                    }
                 });
             });
 
@@ -388,7 +394,11 @@
 
             function updateCarousel() {
                 flashcards.forEach((card, idx) => {
-                    card.classList.toggle('active', idx === currentIndex);
+                    const isActive = idx === currentIndex;
+                    card.classList.toggle('active', isActive);
+                    if (!isActive) {
+                        card.classList.remove('flipped');
+                    }
                 });
                 flashcards[currentIndex].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
             }
