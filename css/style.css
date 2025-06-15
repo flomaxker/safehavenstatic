@@ -441,49 +441,44 @@ main > section.section-card > .container {
 .conclusion-text a:hover { color: var(--color-secondary); }
 
 
-/* --- Integration Flashcards Styles (Accordion) --- */
+/* --- Integration Flashcards Styles (Flippable) --- */
+.flashcard-carousel {
+    position: relative;
+}
 .flashcard-grid {
     display: flex;
-    flex-direction: column;
     gap: 1.5rem;
     margin-top: 2rem;
     margin-bottom: 3rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    padding-bottom: 1rem;
 }
+.flashcard-grid::-webkit-scrollbar { display: none; }
 .flashcard-card {
-    background-color: var(--color-white);
+    background-color: transparent;
+    height: 200px;
     border-radius: 8px;
-    box-shadow: var(--shadow);
-    overflow: hidden;
-    transition: box-shadow 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 1s cubic-bezier(0.4, 0.0, 0.2, 1);
+    transform: translateZ(0);
+    flex: 0 0 250px;
 }
-.flashcard-card.expanded {
+.flashcard-card.flipped { transform: rotateY(180deg); }
+.flashcard-card.active {
+    transform: scale(1.05);
     box-shadow: var(--shadow-hover);
 }
-.flashcard-front {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-    padding: 1rem 1.5rem;
-    font-family: var(--font-heading);
-    font-size: 1.1em;
-    color: var(--color-primary);
+.flashcard-card.flipped.active {
+    transform: rotateY(180deg) scale(1.05);
 }
-.flashcard-front i {
-    transition: transform 0.3s ease;
-}
-.flashcard-card.expanded .flashcard-front i {
-    transform: rotate(180deg);
-}
-.flashcard-back {
-    background-color: var(--color-bg);
-    color: var(--color-text);
-    font-family: var(--font-body);
-    overflow: hidden;
-    max-height: 0;
-    padding: 0 1.5rem;
-    transition: max-height 0.4s ease, padding 0.4s ease;
-}
+.flashcard-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 8px; display: flex; align-items: center; justify-content: center; text-align: center; padding: 1.5rem; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08); overflow: hidden; box-sizing: border-box; transition: box-shadow 0.8s ease; }
+.flashcard-front { background-color: var(--color-white); color: var(--color-primary); font-family: var(--font-heading); font-size: 1.1em; font-weight: 500; z-index: 2; transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; }
+.flashcard-card:not(.flipped) .flashcard-front:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(0, 0, 0, 0.12); }
+.flashcard-back { background-color: var(--color-bg); color: var(--color-text); transform: rotateY(180deg); flex-direction: column; align-items: flex-start; justify-content: flex-start; text-align: left; font-family: var(--font-body); overflow-y: auto; padding-right: 1rem; }
 .flashcard-back h4 { color: var(--color-primary); font-size: 1em; margin-top: 0; margin-bottom: 0.5rem; font-weight: 600; flex-shrink: 0; }
 .flashcard-back p { font-size: 0.95em; line-height: 1.5; margin-bottom: 0; flex-grow: 1; word-break: break-word; }
 .flashcard-back a { color: var(--color-secondary); text-decoration: underline; font-weight: 600; display: inline; word-break: break-word; }
@@ -806,14 +801,20 @@ main > section.section-card > .container {
     .flashcard-grid {
         gap: 1rem;
     }
-    .flashcard-front {
-        padding: 0.8rem 1rem;
-        font-size: 1em;
+    .flashcard-card {
+        height: 220px;
+        flex: 0 0 180px;
     }
+    .flashcard-face {
+        padding: 1rem;
+    }
+     .flashcard-front p { /* Assuming there's a p tag in flashcard-front, else target relevant text element */
+         font-size: 1em;
+     }
     .flashcard-back h4 {
-        font-size: 0.9em;
-        margin-bottom: 0.2rem;
-    }
+         font-size: 0.9em;
+         margin-bottom: 0.2rem;
+     }
     .flashcard-back p {
         font-size: 0.85em;
     }
