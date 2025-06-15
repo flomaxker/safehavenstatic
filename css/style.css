@@ -336,8 +336,8 @@ main > section.section-card > .container {
     box-shadow: var(--shadow-hover);
     transform: translateY(-50%) scale(1.05);
 }
-.carousel-btn.prev { left: -10px; }
-.carousel-btn.next { right: -10px; }
+.carousel-btn.prev { left: 10px; }
+.carousel-btn.next { right: 10px; }
 .carousel-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 @media (max-width: 900px) { .carousel-btn.prev { left: 5px; } .carousel-btn.next { right: 5px; } .testimonial-card { margin: 0; } }
 
@@ -444,6 +444,8 @@ main > section.section-card > .container {
 /* --- Integration Flashcards Styles (Flippable) --- */
 .flashcard-carousel {
     position: relative;
+    width: 100%;
+    overflow: hidden;
 }
 .flashcard-carousel .carousel-btn.prev { left: 10px; }
 .flashcard-carousel .carousel-btn.next { right: 10px; }
