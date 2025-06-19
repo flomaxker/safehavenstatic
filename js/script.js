@@ -209,18 +209,30 @@ function initializeUpdateBanner() {
     const closeBtn = banner.querySelector('.banner-close');
     const root = document.documentElement;
 
-    const setOffset = () => {
+    const updateOffset = (visible) => {
         const height = banner.offsetHeight;
-        root.style.setProperty('--banner-height', banner.style.display === 'none' ? '0px' : `${height}px`);
+        root.style.setProperty('--banner-height', visible ? `${height}px` : '0px');
     };
 
-    setOffset();
-    window.addEventListener('resize', setOffset);
+    let observer;
+
+    const observeBanner = () => {
+        if (observer) observer.disconnect();
+        observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => updateOffset(entry.isIntersecting));
+        });
+        observer.observe(banner);
+    };
+
+    updateOffset(true);
+    observeBanner();
+    window.addEventListener('resize', () => updateOffset(banner.getBoundingClientRect().bottom > 0));
 
     if (closeBtn) {
         closeBtn.addEventListener('click', () => {
             banner.style.display = 'none';
-            setOffset();
+            updateOffset(false);
+            if (observer) observer.disconnect();
         });
     }
 }
