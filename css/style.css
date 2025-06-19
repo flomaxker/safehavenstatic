@@ -108,6 +108,36 @@ main > section.section-card > .container {
 .text-primary { color: var(--color-primary); }
 .text-secondary { color: var(--color-secondary); }
 .text-light { color: var(--color-text-light); }
+
+/* --- Utility Spacing & Layout Classes --- */
+.mt-1 { margin-top: 1rem; }
+.mt-1-5 { margin-top: 1.5rem; }
+.mt-2 { margin-top: 2rem; }
+.mt-3 { margin-top: 3rem; }
+.mt-4 { margin-top: 4rem; }
+.mb-1 { margin-bottom: 1rem; }
+.mb-2 { margin-bottom: 2rem; }
+.mb-2-5 { margin-bottom: 2.5rem; }
+.mb-3-5 { margin-bottom: 3.5rem; }
+.mx-auto { margin-left: auto; margin-right: auto; }
+.maxw-700 { max-width: 700px; }
+.maxw-none { max-width: none; }
+.maxw-800 { max-width: 800px; }
+.d-block { display: block; }
+.text-left { text-align: left; }
+.ml-5 { margin-left: 5px; }
+.py-1 { padding-top: 1rem; padding-bottom: 1rem; }
+.divider {
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(0,0,0,0), var(--color-primary-dark), rgba(0,0,0,0));
+    margin: 2rem 0;
+}
+.list-disc {
+    list-style: disc;
+    margin-left: 2rem;
+    margin-bottom: 1rem;
+}
 .disclaimer { font-size: 0.85rem; color: var(--color-text-light); margin-top: 1rem; font-style: italic;}
 
 /* --- Back Link Styling --- */
