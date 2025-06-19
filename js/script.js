@@ -24,7 +24,7 @@ async function loadHeader() {
     const headerElement = document.querySelector('header.header');
     if (headerElement) {
         try {
-            const response = await fetch('/header.html');
+            const response = await fetch('/includes/header.html');
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             const headerHtml = await response.text();
             headerElement.outerHTML = headerHtml;
@@ -40,7 +40,7 @@ async function loadFooter() {
     const footerElement = document.querySelector('footer.footer');
     if (footerElement) {
         try {
-            const response = await fetch('/footer.html');
+            const response = await fetch('/includes/footer.html');
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
