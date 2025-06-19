@@ -287,7 +287,10 @@ main > section.section-card > .container {
 
 /* --- Testimonial Carousel Styles --- */
 #testimonials { background-color: transparent; }
-.testimonial-carousel-container { overflow: hidden; }
+.testimonial-carousel-container {
+    overflow: hidden;
+    padding-bottom: 2rem;
+}
 .testimonial-track {
     display: flex;
     transition: transform 0.6s var(--easing-bounce);
